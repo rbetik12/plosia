@@ -11,6 +11,7 @@ function catCard(cat) {
       <p class="card__meta">${escapeHtml(cat.breed)} · ${escapeHtml(cat.age)} · ${SEX[cat.sex]}</p>
       <div class="card__foot">
         <span class="price">${formatPrice(cat.price)}</span>
+        <button class="btn btn--primary btn--small" data-add-to-cart="${cat.id}">Забрать домой</button>
       </div>
     </div>
   </article>`;
@@ -26,6 +27,7 @@ function foodCard(item) {
       <p class="card__meta">${escapeHtml(item.kind)} · ${escapeHtml(item.weight)}</p>
       <div class="card__foot">
         <span class="price">${formatPrice(item.price)}</span>
+        <button class="btn btn--primary btn--small" data-add-to-cart="${item.id}">В корзину</button>
       </div>
     </div>
   </article>`;

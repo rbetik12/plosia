@@ -50,6 +50,7 @@ export function catPage(req, cat) {
       <ul class="tags">${cat.traits.map((t) => html`<li>${t}</li>`)}</ul>
       <div class="pet__buy">
         <span class="price price--big">${formatPrice(cat.price)}</span>
+        <button class="btn btn--primary" data-add-to-cart="${cat.id}">Забрать домой</button>
       </div>
     </div>
   </article>`;

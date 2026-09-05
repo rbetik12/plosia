@@ -27,7 +27,9 @@ export function layout(req, { title, page = 'page', body }) {
         <a href="/cats">Котики</a>
         <a href="/food">Корм</a>
       </nav>
-      <div class="topbar__actions"></div>
+      <div class="topbar__actions">
+        <a class="cart-link" href="/cart">Корзина <span class="cart-link__count" data-cart-count hidden>0</span></a>
+      </div>
     </div>
   </header>
   <main class="container main">${body}</main>
