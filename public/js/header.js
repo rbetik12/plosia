@@ -16,6 +16,17 @@ export async function refreshCartCount() {
   }
 }
 
+// Access-токен короткий. Если сервер сказал, что сессия истекла, — обновляем её по refresh-токену.
+export async function refreshSession() {
+  if (!document.body.dataset.authExpired) return;
+  try {
+    await api('POST', '/api/auth/refresh');
+    location.reload();
+  } catch {
+    // refresh тоже истёк — пользователь просто войдёт заново
+  }
+}
+
 export function bindAddToCart() {
   document.addEventListener('click', async (event) => {
     const btn = event.target.closest('[data-add-to-cart]');

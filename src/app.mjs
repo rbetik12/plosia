@@ -2,6 +2,8 @@ import express from 'express';
 import { config } from './config.mjs';
 import { cookies } from './lib/cookies.mjs';
 import { errorHandler, notFoundHandler } from './lib/error-handler.mjs';
+import { authenticate } from './modules/auth/middleware.mjs';
+import * as auth from './modules/auth/routes.mjs';
 import * as cart from './modules/cart/routes.mjs';
 import { cartSession } from './modules/cart/session.mjs';
 import * as catalog from './modules/catalog/routes.mjs';
@@ -14,11 +16,14 @@ export function createApp() {
   app.use(express.static(`${config.root}public`, { maxAge: '1h' }));
   app.use(express.json());
   app.use(cookies());
+  app.use(authenticate);
   app.use(cartSession);
 
   app.get('/healthz', (req, res) => res.json({ ok: true, version: config.version }));
   app.get('/', (req, res) => res.send(homePage(req)));
 
+  app.use('/api/auth', auth.api);
+  app.use(auth.pages);
   app.use('/api/catalog', catalog.api);
   app.use(catalog.pages);
   app.use('/api/cart', cart.api);

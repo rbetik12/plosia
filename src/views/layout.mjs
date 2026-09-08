@@ -19,7 +19,7 @@ export function layout(req, { title, page = 'page', body }) {
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap">
   <link rel="stylesheet" href="/css/style.css">
 </head>
-<body data-page="${page}">
+<body data-page="${page}" data-auth-expired="${req.authExpired ? '1' : ''}">
   <header class="topbar">
     <div class="topbar__inner container">
       <a class="logo" href="/">${logo}<span>Plosia</span></a>
@@ -28,6 +28,9 @@ export function layout(req, { title, page = 'page', body }) {
         <a href="/food">Корм</a>
       </nav>
       <div class="topbar__actions">
+        ${req.user
+          ? html`<a class="user-link" href="/account">${req.user.name.split(' ')[0]}</a>`
+          : html`<a class="user-link" href="/login">Войти</a>`}
         <a class="cart-link" href="/cart">Корзина <span class="cart-link__count" data-cart-count hidden>0</span></a>
       </div>
     </div>

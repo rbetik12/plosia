@@ -1,10 +1,12 @@
-import { bindAddToCart, refreshCartCount } from './header.js';
+import { bindAddToCart, refreshCartCount, refreshSession } from './header.js';
 
 const pages = {
   catalog: () => import('./pages/catalog.js'),
   cart: () => import('./pages/cart.js'),
+  login: () => import('./pages/login.js'),
 };
 
+refreshSession();
 bindAddToCart();
 if (document.body.dataset.page !== 'cart') refreshCartCount();
 
