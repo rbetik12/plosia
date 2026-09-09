@@ -4,6 +4,7 @@ const pages = {
   catalog: () => import('./pages/catalog.js'),
   cart: () => import('./pages/cart.js'),
   login: () => import('./pages/login.js'),
+  account: () => import('./pages/account.js'),
 };
 
 refreshSession();

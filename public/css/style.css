@@ -269,3 +269,23 @@ code { background: var(--primary-soft); padding: 1px 6px; border-radius: 6px; fo
 @media (max-width: 620px) {
   .form--grid { grid-template-columns: 1fr; }
 }
+
+/* Account & orders */
+.account__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+.orders { display: grid; gap: 10px; }
+.order-row { display: grid; grid-template-columns: 120px 1fr auto 120px; gap: 16px; align-items: center; background: var(--surface); border-radius: var(--radius-sm); padding: 14px 18px; box-shadow: var(--shadow-sm); text-decoration: none; }
+.order-row:hover { box-shadow: var(--shadow); }
+.order-row__total { font-weight: 900; text-align: right; }
+.status { display: inline-block; padding: 4px 12px; border-radius: 999px; font-weight: 800; font-size: 0.85rem; background: var(--bg); }
+.status--paid, .status--delivered { background: var(--mint-soft); color: var(--mint); }
+.status--awaiting_payment { background: var(--primary-soft); color: var(--primary-dark); }
+.status--shipped { background: var(--violet-soft); color: var(--violet); }
+.order { background: var(--surface); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-sm); max-width: 760px; }
+.order__head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.order__lines { display: grid; gap: 8px; margin: 18px 0; }
+.order__line { display: grid; grid-template-columns: 1fr auto 110px; gap: 12px; }
+.order__line b { text-align: right; }
+
+@media (max-width: 820px) {
+  .order-row { grid-template-columns: 1fr auto; }
+}
