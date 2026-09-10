@@ -5,6 +5,7 @@ const pages = {
   cart: () => import('./pages/cart.js'),
   login: () => import('./pages/login.js'),
   account: () => import('./pages/account.js'),
+  checkout: () => import('./pages/checkout.js'),
 };
 
 refreshSession();

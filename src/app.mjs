@@ -7,6 +7,7 @@ import * as auth from './modules/auth/routes.mjs';
 import * as cart from './modules/cart/routes.mjs';
 import { cartSession } from './modules/cart/session.mjs';
 import * as catalog from './modules/catalog/routes.mjs';
+import * as checkout from './modules/checkout/routes.mjs';
 import * as orders from './modules/orders/routes.mjs';
 import { homePage } from './views/pages/home.mjs';
 
@@ -29,6 +30,8 @@ export function createApp() {
   app.use(catalog.pages);
   app.use('/api/cart', cart.api);
   app.use(cart.pages);
+  app.use('/api/checkout', checkout.api);
+  app.use(checkout.pages);
   app.use('/api/orders', orders.api);
   app.use(orders.pages);
 

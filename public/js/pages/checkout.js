@@ -1,0 +1,61 @@
+import { api, escapeHtml, formatPrice, showError, toast } from '../lib.js';
+
+export function init() {
+  const root = document.querySelector('[data-checkout]');
+  const form = root.querySelector('[data-order-form]');
+  const payment = form.querySelector('[data-payment]');
+  const submit = form.querySelector('[data-submit]');
+  let order = null;
+
+  loadSummary();
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    submit.disabled = true;
+    try {
+      if (!order) {
+        ({ order } = await api('POST', '/api/checkout', orderPayload()));
+        form.querySelectorAll('fieldset:not([data-payment])').forEach((f) => (f.disabled = true));
+        payment.disabled = false;
+        submit.textContent = `Оплатить ${formatPrice(order.total)}`;
+        toast(`Заказ ${order.id} создан, осталось оплатить`, 'ok');
+      } else {
+        const data = new FormData(form);
+        await api('POST', '/api/checkout/pay', {
+          orderId: order.id,
+          card: { number: data.get('number'), expiry: data.get('expiry'), cvc: data.get('cvc') },
+        });
+        location.href = `/checkout/success?order=${order.id}`;
+        return;
+      }
+    } catch (err) {
+      showError(err);
+    }
+    submit.disabled = false;
+  });
+
+  function orderPayload() {
+    const data = new FormData(form);
+    return {
+      contacts: { name: data.get('name'), phone: data.get('phone'), email: data.get('email') },
+      delivery: { type: 'courier', city: data.get('city'), address: data.get('address') },
+    };
+  }
+
+  async function loadSummary() {
+    try {
+      const cart = await api('GET', '/api/cart');
+      if (!cart.items.length) {
+        location.href = '/cart';
+        return;
+      }
+      root.querySelector('[data-lines]').innerHTML = cart.items
+        .map((item) => `<div class="summary__line"><span>${escapeHtml(item.title)} × ${item.qty}</span><b>${formatPrice(item.total)}</b></div>`)
+        .join('');
+      root.querySelector('[data-subtotal]').textContent = formatPrice(cart.subtotal);
+      root.querySelector('[data-total]').textContent = formatPrice(cart.total);
+    } catch (err) {
+      showError(err);
+    }
+  }
+}
