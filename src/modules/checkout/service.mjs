@@ -1,5 +1,6 @@
 import { badRequest, conflict, HttpError, notFound } from '../../lib/errors.mjs';
 import { clearCart, getCart, summarize } from '../cart/service.mjs';
+import { sendOrderConfirmation } from '../mail/service.mjs';
 import { createOrder, findOrder, markPaid } from '../orders/service.mjs';
 import { charge } from './murpay.mjs';
 
@@ -46,6 +47,7 @@ export async function payOrder(user, orderId, card) {
 
   markPaid(order, result.paymentId);
   clearCart(getCart(order.cartId));
+  await sendOrderConfirmation(order, user);
   return order;
 }
 
