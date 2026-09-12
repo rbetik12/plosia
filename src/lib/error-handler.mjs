@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node';
 import { HttpError } from './errors.mjs';
 import { errorPage } from '../views/pages/error.mjs';
 
@@ -9,6 +10,11 @@ export function errorHandler(err, req, res, next) {
   const status = err.status || err.statusCode || 500;
   if (status >= 500) {
     console.error(`[${req.method} ${req.originalUrl}]`, err);
+    Sentry.withScope((scope) => {
+      scope.setTag('http.status_code', String(status));
+      scope.setContext('response', { status_code: status });
+      Sentry.captureException(err);
+    });
   }
   if (res.headersSent) return next(err);
 

@@ -8,10 +8,11 @@
     "node": ">=22.13"
   },
   "scripts": {
-    "start": "node src/server.mjs",
-    "dev": "node --watch src/server.mjs"
+    "start": "node --import ./src/instrument.mjs src/server.mjs",
+    "dev": "node --watch --import ./src/instrument.mjs src/server.mjs"
   },
   "dependencies": {
+    "@sentry/node": "11.8.0",
     "express": "5.3.0"
   }
 }

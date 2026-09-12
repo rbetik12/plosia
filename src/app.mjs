@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node';
 import express from 'express';
 import { config } from './config.mjs';
 import { cookies } from './lib/cookies.mjs';
@@ -21,6 +22,10 @@ export function createApp() {
   app.use(cookies());
   app.use(authenticate);
   app.use(cartSession);
+  app.use((req, res, next) => {
+    Sentry.setUser(req.user ? { id: req.user.id, email: req.user.email } : { id: `guest:${req.cartId.slice(0, 8)}` });
+    next();
+  });
 
   app.get('/healthz', (req, res) => res.json({ ok: true, version: config.version }));
   app.get('/', (req, res) => res.send(homePage(req)));
