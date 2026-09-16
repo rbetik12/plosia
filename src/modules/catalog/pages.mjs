@@ -8,7 +8,54 @@ const TITLES = {
   food: { title: 'Корм и лакомства', lead: 'Сухой и влажный корм, вкусняшки для дрессировки и просто так.' },
 };
 
-export function catalogPage(req, kind) {
+const FILTER_FIELDS = {
+  cats: [
+    ['breed', 'Порода', 'breeds'],
+    ['color', 'Окрас', 'colors'],
+    ['age', 'Возраст', 'ages'],
+  ],
+  food: [
+    ['kind', 'Тип', 'kinds'],
+    ['brand', 'Бренд', 'brands'],
+    ['age', 'Для кого', 'ages'],
+  ],
+};
+
+const PRICE_STEPS = {
+  cats: [3000, 10000, 30000, 50000],
+  food: [500, 1000, 2000, 5000],
+};
+
+function filtersPanel(kind, options) {
+  return html`
+  <form class="filters" data-filters>
+    ${FILTER_FIELDS[kind].map(
+      ([name, label, key]) => html`
+      <label class="select">
+        <span>${label}</span>
+        <select name="${name}">
+          <option value="">Все</option>
+          ${options[key].map((o) => html`<option value="${o.id}">${o.title}</option>`)}
+        </select>
+      </label>`,
+    )}
+    ${kind === 'cats'
+      ? html`<label class="select"><span>Пол</span>
+          <select name="sex"><option value="">Все</option><option value="m">Котик</option><option value="f">Кошечка</option></select>
+        </label>`
+      : ''}
+    <label class="select">
+      <span>Цена до</span>
+      <select name="price_max">
+        <option value="">Любая</option>
+        ${PRICE_STEPS[kind].map((p) => html`<option value="${p}">${formatPrice(p)}</option>`)}
+      </select>
+    </label>
+    <button class="btn btn--ghost btn--small" type="reset">Сбросить</button>
+  </form>`;
+}
+
+export function catalogPage(req, kind, options) {
   const { title, lead } = TITLES[kind];
   const body = html`
   <section class="catalog" data-kind="${kind}">
@@ -27,6 +74,7 @@ export function catalogPage(req, kind) {
       </label>
     </header>
     <div class="catalog__body">
+      ${filtersPanel(kind, options)}
       <div class="grid" data-grid aria-live="polite"><p class="muted">Загружаем...</p></div>
     </div>
   </section>`;

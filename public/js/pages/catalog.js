@@ -38,10 +38,21 @@ export function init() {
   const kind = root.dataset.kind;
   const grid = root.querySelector('[data-grid]');
   const sort = root.querySelector('[data-sort]');
+  const filters = root.querySelector('[data-filters]');
+
+  // Фильтры живут в адресе страницы, чтобы ссылкой можно было поделиться.
+  const initial = new URLSearchParams(location.search);
+  for (const field of [...filters.elements, sort]) {
+    if (field.name && initial.has(field.name)) field.value = initial.get(field.name);
+  }
 
   async function load() {
     const params = new URLSearchParams();
+    for (const [name, value] of new FormData(filters)) {
+      if (value) params.set(name, value);
+    }
     if (sort.value) params.set('sort', sort.value);
+    history.replaceState(null, '', params.size ? `?${params}` : location.pathname);
     try {
       const data = await api('GET', `/api/catalog/${kind}?${params}`);
       const render = kind === 'cats' ? catCard : foodCard;
@@ -55,5 +66,7 @@ export function init() {
   }
 
   sort.addEventListener('change', load);
+  filters.addEventListener('change', load);
+  filters.addEventListener('reset', () => setTimeout(load));
   load();
 }
