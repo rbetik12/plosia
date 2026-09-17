@@ -216,6 +216,7 @@ select:focus, input:focus, textarea:focus { outline: none; border-color: var(--p
 /* Cart */
 .cart-link { position: relative; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 800; padding: 8px 14px; border-radius: 999px; background: var(--surface); box-shadow: inset 0 0 0 2px var(--line); }
 .cart-link:hover { box-shadow: inset 0 0 0 2px var(--primary); }
+.cart-link__count[hidden] { display: none; }
 .cart-link__count { background: var(--primary); color: #fff; border-radius: 999px; min-width: 22px; height: 22px; padding: 0 6px; display: inline-grid; place-items: center; font-size: 0.8rem; }
 .cart { display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: start; }
 .cart__items { display: grid; gap: 12px; }
