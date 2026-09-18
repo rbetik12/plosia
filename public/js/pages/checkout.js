@@ -54,6 +54,8 @@ export function init() {
         .join('');
       root.querySelector('[data-subtotal]').textContent = formatPrice(cart.subtotal);
       root.querySelector('[data-total]').textContent = formatPrice(cart.total);
+      root.querySelector('[data-discount-row]').hidden = !cart.discount;
+      root.querySelector('[data-discount]').textContent = `−${formatPrice(cart.discount)}`;
     } catch (err) {
       showError(err);
     }

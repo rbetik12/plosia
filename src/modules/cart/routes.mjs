@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { cartPage } from './pages.mjs';
-import { addItem, getCart, removeItem, summarize, updateQty } from './service.mjs';
+import { addItem, applyPromo, getCart, removeItem, removePromo, summarize, updateQty } from './service.mjs';
 
 export const api = Router();
 
@@ -23,6 +23,18 @@ api.patch('/items/:itemId', (req, res) => {
 api.delete('/items/:itemId', (req, res) => {
   const cart = getCart(req.cartId);
   removeItem(cart, req.params.itemId);
+  res.json(summarize(cart));
+});
+
+api.post('/promo', (req, res) => {
+  const cart = getCart(req.cartId);
+  applyPromo(cart, req.body.code);
+  res.json(summarize(cart));
+});
+
+api.delete('/promo', (req, res) => {
+  const cart = getCart(req.cartId);
+  removePromo(cart);
   res.json(summarize(cart));
 });
 

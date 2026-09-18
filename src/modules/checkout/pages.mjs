@@ -46,6 +46,7 @@ export function checkoutPage(req, { cities }) {
       <div data-lines class="summary__lines"></div>
       <dl class="summary__rows">
         <div><dt>Товары</dt><dd data-subtotal></dd></div>
+        <div data-discount-row hidden><dt>Скидка</dt><dd class="discount" data-discount></dd></div>
         <div class="summary__total"><dt>Итого без доставки</dt><dd data-total></dd></div>
       </dl>
     </aside>

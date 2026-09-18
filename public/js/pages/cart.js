@@ -42,6 +42,11 @@ export function init() {
     items.innerHTML = cart.items.map(row).join('');
     summary.hidden = false;
     summary.querySelector('[data-subtotal]').textContent = formatPrice(cart.subtotal);
+    summary.querySelector('[data-discount-row]').hidden = !cart.discount;
+    summary.querySelector('[data-discount]').textContent = `−${formatPrice(cart.discount)}`;
+    summary.querySelector('[data-promo-form]').hidden = Boolean(cart.promo);
+    summary.querySelector('[data-promo-applied]').hidden = !cart.promo;
+    summary.querySelector('[data-promo-code]').textContent = cart.promo?.code ?? '';
     summary.querySelector('[data-total]').textContent = formatPrice(cart.total);
   }
 
@@ -62,6 +67,13 @@ export function init() {
     const removeBtn = event.target.closest('[data-remove]');
     if (removeBtn) run('DELETE', `/api/cart/items/${removeBtn.dataset.remove}`);
   });
+
+  summary.querySelector('[data-promo-form]').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const code = new FormData(event.target).get('code');
+    if (code) run('POST', '/api/cart/promo', { code });
+  });
+  summary.querySelector('[data-promo-remove]').addEventListener('click', () => run('DELETE', '/api/cart/promo'));
 
   run('GET', '/api/cart');
 }

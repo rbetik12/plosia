@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
-import { badRequest, notFound } from '../../lib/errors.mjs';
+import { badRequest, conflict, notFound } from '../../lib/errors.mjs';
 import { findProduct } from '../catalog/service.mjs';
+import { calcDiscount, findPromo, validatePromo } from './promo.mjs';
 
 const MAX_QTY = 20;
 const carts = new Map();
@@ -8,7 +9,7 @@ const carts = new Map();
 export function getCart(cartId) {
   let cart = carts.get(cartId);
   if (!cart) {
-    cart = { id: cartId, items: [] };
+    cart = { id: cartId, items: [], promo: null, discount: 0 };
     carts.set(cartId, cart);
   }
   return cart;
@@ -53,6 +54,23 @@ export function removeItem(cart, itemId) {
 
 export function clearCart(cart) {
   cart.items = [];
+  removePromo(cart);
+}
+
+export function applyPromo(cart, rawCode) {
+  if (cart.promo) {
+    throw conflict(`Уже применён промокод ${cart.promo.code}. Одна скидка на заказ.`, 'promo_already_applied');
+  }
+  const promo = findPromo(String(rawCode || '').trim().toUpperCase());
+  const sum = subtotal(cart);
+  validatePromo(promo, sum);
+  cart.promo = { code: promo.code, kind: promo.kind, value: promo.value };
+  cart.discount = calcDiscount(promo, sum);
+}
+
+export function removePromo(cart) {
+  cart.promo = null;
+  cart.discount = 0;
 }
 
 export function subtotal(cart) {
@@ -74,12 +92,14 @@ export function summarize(cart) {
     };
   });
   const sum = items.reduce((acc, item) => acc + item.total, 0);
+  const discount = cart.promo ? Math.min(cart.discount, sum) : 0;
   return {
     items,
     count: items.reduce((acc, item) => acc + item.qty, 0),
     subtotal: sum,
-    discount: 0,
-    total: sum,
+    promo: cart.promo ? { code: cart.promo.code } : null,
+    discount,
+    total: sum - discount,
   };
 }
 
