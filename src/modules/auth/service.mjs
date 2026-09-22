@@ -1,11 +1,14 @@
 import crypto from 'node:crypto';
 import { config } from '../../config.mjs';
 import { SEED_USERS } from '../../data/users.mjs';
-import { badRequest, conflict, unauthorized } from '../../lib/errors.mjs';
+import { badRequest, conflict, HttpError, unauthorized } from '../../lib/errors.mjs';
 import { signToken, TokenError, verifyToken } from '../../lib/jwt.mjs';
 
 export const ACCESS_TTL = 15 * 60;
 export const REFRESH_TTL = 30 * 24 * 60 * 60;
+
+const MAX_FAILED_LOGINS = 5;
+const LOCK_MINUTES = 15;
 
 const users = new Map();
 const byEmail = new Map();
@@ -41,10 +44,28 @@ export function register({ email, password, name }) {
 
 export function login({ email, password }) {
   const user = byEmail.get(normalizeEmail(email));
+  if (user && isLocked(user)) {
+    throw new HttpError(423, 'Аккаунт временно заблокирован. Попробуйте позже или напишите в поддержку.', 'account_locked');
+  }
   if (!user || !checkPassword(String(password || ''), user.passwordHash)) {
+    if (user) registerFailedLogin(user);
     throw unauthorized('Неверная почта или пароль', 'bad_credentials');
   }
+  user.failedLogins = 0;
   return user;
+}
+
+function isLocked(user) {
+  return Boolean(user.lockedUntil) && new Date(user.lockedUntil) > new Date();
+}
+
+// После пяти неудачных попыток подряд блокируем вход на 15 минут.
+function registerFailedLogin(user) {
+  user.failedLogins = (user.failedLogins || 0) + 1;
+  if (user.failedLogins >= MAX_FAILED_LOGINS) {
+    user.lockedUntil = new Date(Date.now() + LOCK_MINUTES * 60 * 1000).toISOString();
+    user.failedLogins = 0;
+  }
 }
 
 export function issueTokens(user) {
