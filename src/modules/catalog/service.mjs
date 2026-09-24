@@ -1,7 +1,9 @@
 import { BREEDS, CAT_COLORS, CATS } from '../../data/cats.mjs';
 import { BRANDS, FOOD, FOOD_KINDS } from '../../data/food.mjs';
 
-const products = new Map([...CATS, ...FOOD].map((p) => [p.id, p]));
+// Снятые с продажи товары остаются в данных (на них ссылаются старые заказы), но в магазине их нет.
+const onSale = FOOD.filter((item) => !item.discontinued);
+const products = new Map([...CATS, ...onSale].map((p) => [p.id, p]));
 
 export const AGE_GROUPS = [
   { id: 'kitten', title: 'Котята', food: 'Для котят' },
@@ -36,7 +38,7 @@ export function listCats(filters = {}) {
 }
 
 export function listFood(filters = {}) {
-  const items = FOOD.filter(
+  const items = onSale.filter(
     (item) =>
       (!filters.kind || item.kind === filters.kind) &&
       (!filters.brand || item.brand.id === filters.brand) &&

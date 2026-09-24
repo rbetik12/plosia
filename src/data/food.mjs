@@ -28,6 +28,6 @@ export const FOOD = [
   food('food-11', 'PL-F-0501', { title: 'Мятные подушечки', brand: BRANDS.hvostik, kind: 'treat', age: 'adult', weight: '50 г', price: 210, image: '/img/food/food-03.jpg' }),
   food('food-12', 'PL-F-0502', { title: 'Мягкие кусочки 8+', brand: BRANDS.hvostik, kind: 'treat', age: 'senior', weight: '80 г', price: 260, image: '/img/food/food-10.jpg' }),
   food('food-13', 'PL-F-0104', { title: 'Ягнёнок, гипоаллергенный', brand: BRANDS.murlyks, kind: 'dry', age: 'adult', weight: '2 кг', price: 1390, image: '/img/food/food-01.jpg' }),
-  food('food-14', 'PL-F-0100', { title: 'Классик', brand: BRANDS.murlyks, kind: 'dry', age: 'adult', weight: '2 кг', price: 990, image: '/img/food/food-06.jpg' }),
-  food('food-15', 'PL-F-0204', { title: 'Рагу из утки', brand: BRANDS.kotletta, kind: 'wet', age: 'adult', weight: '12 × 85 г', price: 840, image: '/img/food/food-12.jpg' }),
+  food('food-14', 'PL-F-0100', { title: 'Классик', brand: BRANDS.murlyks, kind: 'dry', age: 'adult', weight: '2 кг', price: 990, image: '/img/food/food-06.jpg', discontinued: true }),
+  food('food-15', 'PL-F-0204', { title: 'Рагу из утки', brand: BRANDS.kotletta, kind: 'wet', age: 'adult', weight: '12 × 85 г', price: 840, image: '/img/food/food-12.jpg', discontinued: true }),
 ];
