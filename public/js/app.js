@@ -6,6 +6,7 @@ const pages = {
   login: () => import('./pages/login.js'),
   account: () => import('./pages/account.js'),
   checkout: () => import('./pages/checkout.js'),
+  order: () => import('./pages/order.js'),
 };
 
 refreshSession();

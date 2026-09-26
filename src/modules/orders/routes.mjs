@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { requirePageUser, requireUser } from '../auth/middleware.mjs';
 import { accountPage, orderPage } from './pages.mjs';
+import { buildReceipt } from './receipt.mjs';
 import { getUserOrder, listUserOrders, toOrderDto } from './service.mjs';
 
 export const api = Router();
@@ -11,6 +12,10 @@ api.get('/', requireUser, (req, res) => {
 
 api.get('/:id', requireUser, (req, res) => {
   res.json({ order: toOrderDto(getUserOrder(req.user, req.params.id)) });
+});
+
+api.get('/:id/receipt', requireUser, (req, res) => {
+  res.json({ receipt: buildReceipt(getUserOrder(req.user, req.params.id)) });
 });
 
 export const pages = Router();

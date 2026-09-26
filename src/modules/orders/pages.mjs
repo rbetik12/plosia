@@ -58,6 +58,10 @@ export function orderPage(req, order) {
       <div><dt>Доставка</dt><dd>${order.delivery.cost ? formatPrice(order.delivery.cost) : 'бесплатно'}</dd></div>
       <div class="summary__total"><dt>Итого</dt><dd>${formatPrice(order.total)}</dd></div>
     </dl>
+    ${order.status === 'awaiting_payment'
+      ? ''
+      : html`<button class="btn btn--ghost" data-receipt="${order.id}">Показать чек</button>
+        <div class="receipt" data-receipt-body hidden></div>`}
   </section>`;
   return layout(req, { title: `Заказ ${order.id}`, page: 'order', body });
 }
