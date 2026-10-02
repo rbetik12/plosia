@@ -1,5 +1,6 @@
 import { BREEDS, CAT_COLORS, CATS } from '../../data/cats.mjs';
 import { BRANDS, FOOD, FOOD_KINDS } from '../../data/food.mjs';
+import { cached, filtersKey } from './cache.mjs';
 
 // Снятые с продажи товары остаются в данных (на них ссылаются старые заказы), но в магазине их нет.
 const onSale = FOOD.filter((item) => !item.discontinued);
@@ -26,26 +27,30 @@ export function findCatBySlug(slug) {
 }
 
 export function listCats(filters = {}) {
-  const items = CATS.filter(
-    (cat) =>
-      (!filters.breed || cat.breed.id === filters.breed) &&
-      (!filters.color || cat.color === filters.color) &&
-      (!filters.sex || cat.sex === filters.sex) &&
-      (!filters.age || ageGroup(cat.ageMonths) === filters.age) &&
-      (!filters.price_max || cat.price <= Number(filters.price_max)),
-  );
-  return sortItems(items, filters.sort);
+  return cached(filtersKey(filters), () => {
+    const items = CATS.filter(
+      (cat) =>
+        (!filters.breed || cat.breed.id === filters.breed) &&
+        (!filters.color || cat.color === filters.color) &&
+        (!filters.sex || cat.sex === filters.sex) &&
+        (!filters.age || ageGroup(cat.ageMonths) === filters.age) &&
+        (!filters.price_max || cat.price <= Number(filters.price_max)),
+    );
+    return sortItems(items, filters.sort);
+  });
 }
 
 export function listFood(filters = {}) {
-  const items = onSale.filter(
-    (item) =>
-      (!filters.kind || item.kind === filters.kind) &&
-      (!filters.brand || item.brand.id === filters.brand) &&
-      (!filters.age || item.age === filters.age) &&
-      (!filters.price_max || item.price <= Number(filters.price_max)),
-  );
-  return sortItems(items, filters.sort);
+  return cached(filtersKey(filters), () => {
+    const items = onSale.filter(
+      (item) =>
+        (!filters.kind || item.kind === filters.kind) &&
+        (!filters.brand || item.brand.id === filters.brand) &&
+        (!filters.age || item.age === filters.age) &&
+        (!filters.price_max || item.price <= Number(filters.price_max)),
+    );
+    return sortItems(items, filters.sort);
+  });
 }
 
 export function filterOptions() {
