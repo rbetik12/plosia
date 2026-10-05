@@ -3,6 +3,7 @@ import { clearCart, getCart, summarize } from '../cart/service.mjs';
 import { sendOrderConfirmation } from '../mail/service.mjs';
 import { createOrder, findOrder, markPaid } from '../orders/service.mjs';
 import { charge } from './murpay.mjs';
+import { findPickupPoint } from './pickup.mjs';
 
 export const CITIES = ['Москва', 'Санкт-Петербург', 'Казань', 'Новосибирск', 'Екатеринбург'];
 
@@ -62,6 +63,11 @@ function validateContacts(contacts = {}) {
 }
 
 function validateDelivery(delivery = {}) {
+  if (delivery.type === 'pickup') {
+    const point = findPickupPoint(delivery.pointId);
+    if (!point) throw badRequest('Выберите пункт выдачи', 'pickup_point_required');
+    return { type: 'pickup', city: point.city, pointId: point.id, address: `${point.title}, ${point.address}` };
+  }
   if (delivery.type !== 'courier') throw badRequest('Выберите способ доставки', 'bad_delivery');
   if (!CITIES.includes(delivery.city)) throw badRequest('В этот город мы пока не доставляем', 'bad_city');
   const address = String(delivery.address || '').trim();

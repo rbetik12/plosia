@@ -3,9 +3,14 @@ import { requirePageUser, requireUser } from '../auth/middleware.mjs';
 import { getCart } from '../cart/service.mjs';
 import { getUserOrder, toOrderDto } from '../orders/service.mjs';
 import { checkoutPage, successPage } from './pages.mjs';
+import { listPickupPoints } from './pickup.mjs';
 import { CITIES, payOrder, placeOrder } from './service.mjs';
 
 export const api = Router();
+
+api.get('/pickup-points', (req, res) => {
+  res.json({ items: listPickupPoints(String(req.query.city || '')) });
+});
 
 api.post('/', requireUser, (req, res) => {
   const order = placeOrder(req.user, getCart(req.cartId), req.body);

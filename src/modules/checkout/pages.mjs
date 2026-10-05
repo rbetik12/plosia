@@ -19,12 +19,17 @@ export function checkoutPage(req, { cities }) {
 
       <fieldset class="step">
         <legend><span class="step__num">2</span> Доставка</legend>
-        <div class="form form--grid" data-courier>
+        <div class="segmented" role="radiogroup">
+          <label><input type="radio" name="deliveryType" value="courier" checked> Курьер</label>
+          <label><input type="radio" name="deliveryType" value="pickup"> Самовывоз</label>
+        </div>
+        <div class="form form--grid">
           <label>Город
             <select name="city">${cities.map((city) => html`<option>${city}</option>`)}</select>
           </label>
-          <label>Адрес<input name="address" placeholder="Улица, дом, квартира"></label>
-          <p class="hint form__wide">Курьер — 299 ₽, от 3 000 ₽ бесплатно.</p>
+          <label data-courier>Адрес<input name="address" placeholder="Улица, дом, квартира"></label>
+          <p class="hint form__wide" data-courier>Курьер — 299 ₽, от 3 000 ₽ бесплатно.</p>
+          <div class="points form__wide" data-pickup hidden></div>
         </div>
       </fieldset>
 
