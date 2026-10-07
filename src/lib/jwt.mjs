@@ -11,10 +11,11 @@ export class TokenError extends Error {
 const encode = (obj) => Buffer.from(JSON.stringify(obj)).toString('base64url');
 const hmac = (data, secret) => crypto.createHmac('sha256', secret).update(data).digest('base64url');
 
-export function signToken(payload, secret, ttlSeconds) {
+export function signToken(payload, key, ttlSeconds) {
   const now = Math.floor(Date.now() / 1000);
-  const data = `${encode({ alg: 'HS256', typ: 'JWT' })}.${encode({ ...payload, iat: now, exp: now + ttlSeconds })}`;
-  return `${data}.${hmac(data, secret)}`;
+  const header = { alg: 'HS256', typ: 'JWT', kid: key.kid };
+  const data = `${encode(header)}.${encode({ ...payload, iat: now, exp: now + ttlSeconds })}`;
+  return `${data}.${hmac(data, key.secret)}`;
 }
 
 export function decodeToken(token) {
@@ -32,9 +33,10 @@ export function decodeToken(token) {
   }
 }
 
-export function verifyToken(token, secret) {
-  const { payload, data, signature } = decodeToken(token);
-  const expected = Buffer.from(hmac(data, secret));
+export function verifyToken(token, keys) {
+  const { header, payload, data, signature } = decodeToken(token);
+  const key = keys[header.kid];
+  const expected = Buffer.from(hmac(data, key.secret));
   const actual = Buffer.from(signature);
   if (expected.length !== actual.length || !crypto.timingSafeEqual(expected, actual)) {
     throw new TokenError('bad_signature');

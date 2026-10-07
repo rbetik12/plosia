@@ -1,8 +1,8 @@
 import crypto from 'node:crypto';
-import { config } from '../../config.mjs';
 import { SEED_USERS } from '../../data/users.mjs';
 import { badRequest, conflict, HttpError, unauthorized } from '../../lib/errors.mjs';
 import { signToken, TokenError, verifyToken } from '../../lib/jwt.mjs';
+import { currentKey, SIGNING_KEYS } from './keys.mjs';
 
 export const ACCESS_TTL = 15 * 60;
 export const REFRESH_TTL = 30 * 24 * 60 * 60;
@@ -70,13 +70,13 @@ function registerFailedLogin(user) {
 
 export function issueTokens(user) {
   return {
-    access: signToken({ sub: user.id, type: 'access' }, config.jwtSecret, ACCESS_TTL),
-    refresh: signToken({ sub: user.id, type: 'refresh' }, config.jwtSecret, REFRESH_TTL),
+    access: signToken({ sub: user.id, type: 'access' }, currentKey(), ACCESS_TTL),
+    refresh: signToken({ sub: user.id, type: 'refresh' }, currentKey(), REFRESH_TTL),
   };
 }
 
 export function verifyAccess(token) {
-  const payload = verifyToken(token, config.jwtSecret);
+  const payload = verifyToken(token, SIGNING_KEYS);
   if (payload.type !== 'access') throw new TokenError('wrong_type');
   return payload;
 }
@@ -84,7 +84,7 @@ export function verifyAccess(token) {
 export function refresh(token) {
   let payload;
   try {
-    payload = verifyToken(token, config.jwtSecret);
+    payload = verifyToken(token, SIGNING_KEYS);
   } catch (err) {
     if (err instanceof TokenError) throw unauthorized('Сессия истекла, войдите снова', 'session_expired');
     throw err;
