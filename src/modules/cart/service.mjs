@@ -9,7 +9,7 @@ const carts = new Map();
 export function getCart(cartId) {
   let cart = carts.get(cartId);
   if (!cart) {
-    cart = { id: cartId, items: [], promo: null, discount: 0 };
+    cart = { id: cartId, items: [], promoCode: null, discount: 0 };
     carts.set(cartId, cart);
   }
   return cart;
@@ -44,6 +44,7 @@ export function updateQty(cart, itemId, qty) {
   }
   checkQty(qty);
   item.qty = qty;
+  recalcDiscount(cart);
   return item;
 }
 
@@ -58,19 +59,27 @@ export function clearCart(cart) {
 }
 
 export function applyPromo(cart, rawCode) {
-  if (cart.promo) {
-    throw conflict(`Уже применён промокод ${cart.promo.code}. Одна скидка на заказ.`, 'promo_already_applied');
+  if (cart.promoCode) {
+    throw conflict(`Уже применён промокод ${cart.promoCode.toUpperCase()}. Одна скидка на заказ.`, 'promo_already_applied');
   }
-  const promo = findPromo(String(rawCode || '').trim().toUpperCase());
+  const code = String(rawCode || '').trim();
+  const promo = findPromo(code.toUpperCase());
   const sum = subtotal(cart);
   validatePromo(promo, sum);
-  cart.promo = { code: promo.code, kind: promo.kind, value: promo.value };
+  // Храним только код: условия промокода берём актуальные при каждом пересчёте.
+  cart.promoCode = code;
   cart.discount = calcDiscount(promo, sum);
 }
 
 export function removePromo(cart) {
-  cart.promo = null;
+  cart.promoCode = null;
   cart.discount = 0;
+}
+
+// Скидка зависит от суммы корзины, поэтому при смене количества пересчитываем её.
+function recalcDiscount(cart) {
+  if (!cart.promoCode) return;
+  cart.discount = calcDiscount(findPromo(cart.promoCode), subtotal(cart));
 }
 
 export function subtotal(cart) {
@@ -92,12 +101,12 @@ export function summarize(cart) {
     };
   });
   const sum = items.reduce((acc, item) => acc + item.total, 0);
-  const discount = cart.promo ? Math.min(cart.discount, sum) : 0;
+  const discount = cart.promoCode ? Math.min(cart.discount, sum) : 0;
   return {
     items,
     count: items.reduce((acc, item) => acc + item.qty, 0),
     subtotal: sum,
-    promo: cart.promo ? { code: cart.promo.code } : null,
+    promo: cart.promoCode ? { code: cart.promoCode.toUpperCase() } : null,
     discount,
     total: sum - discount,
   };
