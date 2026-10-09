@@ -2,7 +2,8 @@
 // В песочнице шлюз эмулируется: случайная задержка ответа и тестовые карты.
 import crypto from 'node:crypto';
 
-const TIMEOUT_MS = 5000;
+// Покупатель не должен ждать оплату дольше пары секунд.
+const TIMEOUT_MS = 2000;
 
 export class PaymentGatewayError extends Error {
   constructor(message) {
