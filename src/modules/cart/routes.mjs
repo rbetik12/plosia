@@ -1,5 +1,7 @@
+import * as Sentry from '@sentry/node';
 import { Router } from 'express';
 import { cartPage } from './pages.mjs';
+import { PromoError } from './promo.mjs';
 import { addItem, applyPromo, getCart, removeItem, removePromo, summarize, updateQty } from './service.mjs';
 
 export const api = Router();
@@ -28,7 +30,18 @@ api.delete('/items/:itemId', (req, res) => {
 
 api.post('/promo', (req, res) => {
   const cart = getCart(req.cartId);
-  applyPromo(cart, req.body.code);
+  try {
+    applyPromo(cart, req.body.code);
+  } catch (err) {
+    // Маркетингу важно видеть, какие коды вводят и почему они не срабатывают.
+    if (err instanceof PromoError) {
+      Sentry.captureException(err, {
+        level: 'warning',
+        tags: { 'http.status_code': String(err.status), promo_code: String(req.body.code ?? '').slice(0, 32) },
+      });
+    }
+    throw err;
+  }
   res.json(summarize(cart));
 });
 
