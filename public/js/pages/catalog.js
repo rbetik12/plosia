@@ -5,7 +5,10 @@ const SEX = { m: 'котик', f: 'кошечка' };
 function catCard(cat) {
   return `
   <article class="card">
-    <a class="card__photo" href="/cats/${cat.slug}"><img src="${cat.image}" alt="${escapeHtml(cat.name)}" loading="lazy"></a>
+    <a class="card__photo" href="/cats/${cat.slug}">
+      <img src="${cat.image}" alt="${escapeHtml(cat.name)}" loading="lazy">
+      ${cat.isNew ? '<span class="badge">Новинка</span>' : ''}
+    </a>
     <div class="card__body">
       <h3><a href="/cats/${cat.slug}">${escapeHtml(cat.name)}</a></h3>
       <p class="card__meta">${escapeHtml(cat.breed)} · ${escapeHtml(cat.age)} · ${SEX[cat.sex]}</p>

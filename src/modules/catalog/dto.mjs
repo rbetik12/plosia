@@ -20,6 +20,7 @@ export function toCatCard(cat) {
     sex: cat.sex,
     price: cat.price,
     image: cat.image,
+    isNew: Boolean(cat.isNew),
   };
 }
 

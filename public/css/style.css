@@ -338,3 +338,6 @@ code { background: var(--primary-soft); padding: 1px 6px; border-radius: 6px; fo
 .points { display: grid; gap: 8px; }
 .point { display: flex !important; gap: 10px; align-items: flex-start; background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; cursor: pointer; font-weight: 400 !important; }
 .point input { margin-top: 4px; accent-color: var(--primary); }
+
+/* Badges */
+.badge { position: absolute; top: 12px; left: 12px; background: var(--violet); color: #fff; font-weight: 800; font-size: 0.78rem; padding: 4px 10px; border-radius: 999px; box-shadow: var(--shadow-sm); }
