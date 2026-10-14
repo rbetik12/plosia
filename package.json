@@ -1,6 +1,6 @@
 {
   "name": "plosia",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "private": true,
   "description": "Plosia — интернет-магазин котиков и кошачьего корма",
   "type": "module",
