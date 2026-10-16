@@ -1,6 +1,6 @@
 import { PROMOS } from '../../data/promos.mjs';
 import { HttpError } from '../../lib/errors.mjs';
-import { formatPrice } from '../../lib/money.mjs';
+import { formatPrice, percentOf } from '../../lib/money.mjs';
 
 // Одна скидка на заказ, и она не может быть больше половины суммы товаров.
 export const MAX_DISCOUNT_PERCENT = 50;
@@ -27,7 +27,7 @@ export function validatePromo(promo, subtotal, now = new Date()) {
 }
 
 export function calcDiscount(promo, subtotal) {
-  const limit = Math.floor((subtotal * MAX_DISCOUNT_PERCENT) / 100);
-  const discount = promo.kind === 'percent' ? Math.floor((subtotal * promo.value) / 100) : promo.value;
+  const limit = percentOf(subtotal, MAX_DISCOUNT_PERCENT);
+  const discount = promo.kind === 'percent' ? percentOf(subtotal, promo.value) : promo.value;
   return Math.min(discount, limit);
 }

@@ -1,4 +1,5 @@
 import { conflict } from '../../lib/errors.mjs';
+import { vatIncluded } from '../../lib/money.mjs';
 import { findProduct } from '../catalog/service.mjs';
 
 const SELLER = { name: 'ООО «Плосия»', inn: '7701234567', address: 'Москва, ул. Покровка, 17' };
@@ -22,7 +23,7 @@ export function buildReceipt(order) {
       price: item.price,
       amount,
       vatRate,
-      vat: Math.round((amount * vatRate) / (100 + vatRate)),
+      vat: vatIncluded(amount, vatRate),
     };
   });
 
