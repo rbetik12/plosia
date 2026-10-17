@@ -70,6 +70,7 @@ export function catalogPage(req, kind, options) {
           <option value="">Сначала популярные</option>
           <option value="price_asc">Сначала дешевле</option>
           <option value="price_desc">Сначала дороже</option>
+          ${kind === 'cats' ? html`<option value="new">Сначала новинки</option>` : ''}
         </select>
       </label>
     </header>

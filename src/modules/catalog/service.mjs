@@ -76,5 +76,6 @@ function sortItems(items, sort) {
   const sorted = [...items];
   if (sort === 'price_asc') sorted.sort((a, b) => a.price - b.price);
   if (sort === 'price_desc') sorted.sort((a, b) => b.price - a.price);
+  if (sort === 'new') sorted.sort((a, b) => Number(Boolean(b.isNew)) - Number(Boolean(a.isNew)));
   return sorted;
 }
