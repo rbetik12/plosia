@@ -54,10 +54,10 @@ export async function payOrder(user, orderId, card) {
 
 function validateContacts(contacts = {}) {
   const name = String(contacts.name || '').trim();
-  const phone = String(contacts.phone || '').trim();
+  const phone = String(contacts.phone || '').replace(/[\s()-]/g, '');
   const email = String(contacts.email || '').trim();
   if (!name) throw badRequest('Укажите имя получателя', 'name_required');
-  if (!/^\+?[\d\s()-]{10,18}$/.test(phone)) throw badRequest('Проверьте номер телефона', 'bad_phone');
+  if (!/^(\+7|8)\d{10}$/.test(phone)) throw badRequest('Проверьте номер телефона', 'bad_phone');
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw badRequest('Проверьте почту', 'bad_email');
   return { name, phone, email };
 }
