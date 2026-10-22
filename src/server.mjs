@@ -10,7 +10,7 @@ app.listen(config.port, config.host, () => {
   for (const ip of lanAddresses()) {
     console.log(`  В сети:    http://${ip}:${config.port}`);
   }
-  console.log('');
+  console.log(`\n  Страница воркшопа: http://localhost:${config.port}/workshop\n`);
 });
 
 function lanAddresses() {

@@ -12,6 +12,8 @@ import * as checkout from './modules/checkout/routes.mjs';
 import * as mail from './modules/mail/routes.mjs';
 import * as orders from './modules/orders/routes.mjs';
 import { homePage } from './views/pages/home.mjs';
+import * as workshop from './workshop/page.mjs';
+import { seedMode, seedRouter } from './workshop/seed-mode.mjs';
 
 export function createApp() {
   const app = express();
@@ -26,6 +28,7 @@ export function createApp() {
     Sentry.setUser(req.user ? { id: req.user.id, email: req.user.email } : { id: `guest:${req.cartId.slice(0, 8)}` });
     next();
   });
+  if (seedMode) app.use(seedRouter());
 
   app.get('/healthz', (req, res) => res.json({ ok: true, version: config.version }));
   app.get('/', (req, res) => res.send(homePage(req)));
@@ -41,6 +44,7 @@ export function createApp() {
   app.use('/api/orders', orders.api);
   app.use(orders.pages);
   app.use(mail.pages);
+  app.use(workshop.pages);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
