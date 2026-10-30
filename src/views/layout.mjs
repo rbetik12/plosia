@@ -8,11 +8,11 @@ const logo = html`<svg class="logo__mark" viewBox="0 0 48 48" aria-hidden="true"
 
 export function layout(req, { title, page = 'page', body }) {
   return html`<!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${title ? `${title} — Plosia` : 'Plosia — котики и всё для них'}</title>
+  <title>${title ? `${title} — Plosia` : 'Plosia — cats and everything for them'}</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,22 +24,22 @@ export function layout(req, { title, page = 'page', body }) {
     <div class="topbar__inner container">
       <a class="logo" href="/">${logo}<span>Plosia</span></a>
       <nav class="nav">
-        <a href="/cats">Котики</a>
-        <a href="/food">Корм</a>
+        <a href="/cats">Cats</a>
+        <a href="/food">Food</a>
       </nav>
       <div class="topbar__actions">
         ${req.user
           ? html`<a class="user-link" href="/account">${req.user.name.split(' ')[0]}</a>`
-          : html`<a class="user-link" href="/login">Войти</a>`}
-        <a class="cart-link" href="/cart">Корзина <span class="cart-link__count" data-cart-count hidden>0</span></a>
+          : html`<a class="user-link" href="/login">Log in</a>`}
+        <a class="cart-link" href="/cart">Cart <span class="cart-link__count" data-cart-count hidden>0</span></a>
       </div>
     </div>
   </header>
   <main class="container main">${body}</main>
   <footer class="footer">
     <div class="container footer__inner">
-      <span>© ${new Date().getFullYear()} Plosia. Мурчим с любовью.</span>
-      <span class="footer__muted">Все котики настоящие. Корм тоже.</span>
+      <span>© ${new Date().getFullYear()} Plosia. Purring with love.</span>
+      <span class="footer__muted">All the cats are real. The food too.</span>
     </div>
   </footer>
   <div class="toast" id="toast" role="status" hidden></div>

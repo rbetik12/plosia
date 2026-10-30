@@ -1,8 +1,8 @@
-// Ключи подписи JWT. Идентификатор ключа (kid) пишется в заголовок токена,
-// поэтому ключи можно менять: новые токены подписываем последним ключом,
-// а токены, выпущенные раньше, проверяем тем ключом, которым их подписали.
+// JWT signing keys. The key id (kid) is written to the token header,
+// so keys can be rotated: new tokens are signed with the last key,
+// and tokens issued earlier are verified with the key that signed them.
 //
-// Формат JWT_KEYS: "kid1:secret1,kid2:secret2" — последний ключ используется для подписи.
+// JWT_KEYS format: "kid1:secret1,kid2:secret2" — the last key is used for signing.
 const DEFAULT_KEYS = '2026-10:plosia-dev-signing-key-2026-10';
 
 export const SIGNING_KEYS = Object.fromEntries(

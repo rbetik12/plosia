@@ -1,29 +1,29 @@
-# Severity и приоритеты
+# Severity and priority
 
-## Severity — насколько плохо, когда баг случается
+## Severity — how bad it is when the bug happens
 
-| Severity | Когда ставим | Пример в Plosia |
+| Severity | When we assign it | Example in Plosia |
 |---|---|---|
-| **Blocker** | Покупатель не может купить или оплатить, обхода нет | Оплата падает у всех |
-| **Critical** | Ключевой сценарий сломан для заметной группы, обход неочевиден; ошибка в деньгах | Скидка считается неверно; заказ не создаётся в одном городе |
-| **Major** | Сценарий сломан, но есть понятный обход | Самовывоз не работает, но курьером заказать можно |
-| **Minor** | Неудобно, но покупка не страдает | Фильтр сбрасывается после перехода назад |
-| **Trivial** | Косметика | Опечатка в письме |
+| **Blocker** | The customer cannot buy or pay, and there is no workaround | Payment fails for everyone |
+| **Critical** | A key scenario is broken for a noticeable group, the workaround is not obvious; an error in money | A discount is calculated wrongly; an order cannot be created in one city |
+| **Major** | A scenario is broken, but there is a clear workaround | Pickup does not work, but the customer can order with a courier |
+| **Minor** | Inconvenient, but the purchase is not affected | The filter resets after going back |
+| **Trivial** | Cosmetic | A typo in an email |
 
-Баги, связанные с деньгами — всегда минимум **Critical**: неверная сумма, скидка или списание.
+Money-related bugs are always at least **Critical**: a wrong amount, discount or charge.
 
-## Приоритет — как быстро чиним
+## Priority — how fast we fix it
 
-| Приоритет | Правило |
+| Priority | Rule |
 |---|---|
-| **P1** — чиним сегодня | Blocker; или Critical, который задевает **≥ 30 пользователей за сутки**; любые проблемы с оплатой |
-| **P2** — в ближайший релиз | Остальные Critical и Major; ошибки, которые видят **≥ 10 пользователей за сутки** |
-| **P3** — по возможности | Minor, Trivial; редкие ошибки (**< 10 пользователей за сутки**) без влияния на деньги |
+| **P1** — fix today | Blocker; or Critical that affects **≥ 30 users per day**; any payment problems |
+| **P2** — in the next release | Other Critical and Major; errors seen by **≥ 10 users per day** |
+| **P3** — when possible | Minor, Trivial; rare errors (**< 10 users per day**) with no impact on money |
 
-Если данных о числе пользователей нет — так и пишем, приоритет ставим по severity и помечаем «требует уточнения».
+If there is no data on the number of users, we say so, set the priority by severity and mark it "needs clarification".
 
-## 5xx в Sentry
+## 5xx in Sentry
 
-- Считаем только серверные ошибки: `http.status_code` 500–599. 4xx (неверный промокод, неверный пароль) — не баги сервера.
-- Предупреждения (`level:warning`) — не 5xx, даже если выглядят страшно.
-- Одна issue в Sentry ≠ один баг: одна причина может давать несколько issue, и наоборот.
+- We count only server errors: `http.status_code` 500–599. 4xx (a wrong promo code, a wrong password) are not server bugs.
+- Warnings (`level:warning`) are not 5xx, even if they look scary.
+- One Sentry issue ≠ one bug: one cause can produce several issues, and vice versa.

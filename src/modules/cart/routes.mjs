@@ -33,7 +33,7 @@ api.post('/promo', (req, res) => {
   try {
     applyPromo(cart, req.body.code);
   } catch (err) {
-    // Маркетингу важно видеть, какие коды вводят и почему они не срабатывают.
+    // Marketing wants to see which codes people enter and why they don't work.
     if (err instanceof PromoError) {
       Sentry.captureException(err, {
         level: 'warning',

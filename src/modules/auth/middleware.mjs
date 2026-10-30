@@ -14,7 +14,7 @@ export function authenticate(req, res, next) {
       req.user = null;
     }
   }
-  // Access-токен живёт 15 минут; если остался refresh, фронт обновит сессию сам.
+  // The access token lives for 15 minutes; if a refresh token is left, the frontend renews the session itself.
   req.authExpired = !req.user && Boolean(req.cookies[REFRESH_COOKIE]);
   next();
 }

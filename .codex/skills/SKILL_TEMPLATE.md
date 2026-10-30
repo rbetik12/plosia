@@ -1,28 +1,28 @@
 ---
 name: regression-plan
-description: <что делает>. Используй, когда <в каких запросах, какими словами коллеги об этом просят>.
+description: <what it does>. Use when <in which requests, in what words colleagues ask for it>.
 ---
 
-# <Цель: одна фраза о задаче>
+# <Goal: one phrase describing the task>
 
-## Входные данные
+## Input
 
-<Откуда брать данные и что делать, если их нет.>
+<Where to get the data and what to do if it is missing.>
 
-## Шаги
+## Steps
 
 1. …
 2. …
 
-## Формат результата
+## Output format
 
-<Шаблон ответа. Можно вынести в template.md рядом и сослаться на него.>
+<Answer template. You can move it to a template.md next to this file and link to it.>
 
-## Правила
+## Rules
 
-- Не хватает данных — спроси или пометь «требует уточнения», не выдумывай.
+- If data is missing, ask or mark it "needs clarification"; do not make things up.
 - …
 
-## Пример
+## Example
 
-<Один эталонный пример: вход → результат.>
+<One reference example: input → result.>

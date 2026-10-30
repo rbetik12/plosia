@@ -1,6 +1,6 @@
 import { PICKUP_POINTS } from '../../data/pickup-points.mjs';
 
-const TYPE_TITLES = { shop: 'Магазин', pvz: 'Пункт выдачи', locker: 'Постамат' };
+const TYPE_TITLES = { shop: 'Store', pvz: 'Pickup point', locker: 'Parcel locker' };
 
 export function listPickupPoints(city) {
   return PICKUP_POINTS.filter((point) => point.city === city).map(toPointDto);

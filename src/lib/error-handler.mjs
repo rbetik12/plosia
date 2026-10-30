@@ -3,7 +3,7 @@ import { HttpError } from './errors.mjs';
 import { errorPage } from '../views/pages/error.mjs';
 
 export function notFoundHandler(req, res, next) {
-  next(new HttpError(404, 'Такой страницы нет. Возможно, её утащил кот.', 'not_found'));
+  next(new HttpError(404, 'There is no such page. Maybe a cat dragged it away.', 'not_found'));
 }
 
 export function errorHandler(err, req, res, next) {
@@ -18,7 +18,7 @@ export function errorHandler(err, req, res, next) {
   }
   if (res.headersSent) return next(err);
 
-  const message = status >= 500 ? 'Что-то пошло не так. Мы уже разбираемся.' : err.message;
+  const message = status >= 500 ? 'Something went wrong. We are already looking into it.' : err.message;
 
   if (req.originalUrl.startsWith('/api/')) {
     return res.status(status).json({

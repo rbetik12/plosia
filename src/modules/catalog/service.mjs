@@ -2,14 +2,14 @@ import { BREEDS, CAT_COLORS, CATS } from '../../data/cats.mjs';
 import { BRANDS, FOOD, FOOD_KINDS } from '../../data/food.mjs';
 import { cached, filtersKey } from './cache.mjs';
 
-// Снятые с продажи товары остаются в данных (на них ссылаются старые заказы), но в магазине их нет.
+// Discontinued items stay in the data (old orders refer to them), but they are not in the shop.
 const onSale = FOOD.filter((item) => !item.discontinued);
 const products = new Map([...CATS, ...onSale].map((p) => [p.id, p]));
 
 export const AGE_GROUPS = [
-  { id: 'kitten', title: 'Котята', food: 'Для котят' },
-  { id: 'adult', title: 'Взрослые', food: 'Для взрослых' },
-  { id: 'senior', title: 'Мудрые (8+)', food: 'Для пожилых' },
+  { id: 'kitten', title: 'Kittens', food: 'For kittens' },
+  { id: 'adult', title: 'Adults', food: 'For adults' },
+  { id: 'senior', title: 'Wise (8+)', food: 'For seniors' },
 ];
 
 export function ageGroup(months) {

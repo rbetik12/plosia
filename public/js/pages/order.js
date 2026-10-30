@@ -21,14 +21,14 @@ export function init() {
 
 function render(r) {
   const rows = r.lines
-    .map((l) => `<tr><td>${escapeHtml(l.sku)}</td><td>${escapeHtml(l.title)}</td><td>${l.qty}</td><td>${formatPrice(l.amount)}</td><td>${l.vatRate ? `${l.vatRate}%` : 'без НДС'}</td></tr>`)
+    .map((l) => `<tr><td>${escapeHtml(l.sku)}</td><td>${escapeHtml(l.title)}</td><td>${l.qty}</td><td>${formatPrice(l.amount)}</td><td>${l.vatRate ? `${l.vatRate}%` : 'no VAT'}</td></tr>`)
     .join('');
   return `
-  <h3>Кассовый чек ${escapeHtml(r.number)}</h3>
-  <p class="muted">${escapeHtml(r.seller.name)}, ИНН ${escapeHtml(r.seller.inn)} · ${new Date(r.issuedAt).toLocaleString('ru-RU')}</p>
+  <h3>Receipt ${escapeHtml(r.number)}</h3>
+  <p class="muted">${escapeHtml(r.seller.name)}, Tax ID ${escapeHtml(r.seller.inn)} · ${new Date(r.issuedAt).toLocaleString('en-US')}</p>
   <table class="receipt__table">
-    <thead><tr><th>Артикул</th><th>Товар</th><th>Кол-во</th><th>Сумма</th><th>НДС</th></tr></thead>
+    <thead><tr><th>SKU</th><th>Item</th><th>Qty</th><th>Amount</th><th>VAT</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>
-  <p><b>Итого: ${formatPrice(r.total)}</b>, в т. ч. НДС ${formatPrice(r.vatTotal)}</p>`;
+  <p><b>Total: ${formatPrice(r.total)}</b>, incl. VAT ${formatPrice(r.vatTotal)}</p>`;
 }

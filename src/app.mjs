@@ -12,8 +12,7 @@ import * as checkout from './modules/checkout/routes.mjs';
 import * as mail from './modules/mail/routes.mjs';
 import * as orders from './modules/orders/routes.mjs';
 import { homePage } from './views/pages/home.mjs';
-import * as workshop from './workshop/page.mjs';
-import { seedMode, seedRouter } from './workshop/seed-mode.mjs';
+import { seedMode, seedRouter } from './lib/seed-mode.mjs';
 
 export function createApp() {
   const app = express();
@@ -44,7 +43,6 @@ export function createApp() {
   app.use('/api/orders', orders.api);
   app.use(orders.pages);
   app.use(mail.pages);
-  app.use(workshop.pages);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

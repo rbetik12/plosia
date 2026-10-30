@@ -29,10 +29,10 @@ export function publicUser(user) {
 
 export function register({ email, password, name }) {
   const normalized = normalizeEmail(email);
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(normalized)) throw badRequest('Проверьте почту', 'bad_email');
-  if (String(password || '').length < 8) throw badRequest('Пароль — минимум 8 символов', 'weak_password');
-  if (!String(name || '').trim()) throw badRequest('Как вас зовут?', 'name_required');
-  if (byEmail.has(normalized)) throw conflict('Такая почта уже зарегистрирована', 'email_taken');
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(normalized)) throw badRequest('Check the email address', 'bad_email');
+  if (String(password || '').length < 8) throw badRequest('Password must be at least 8 characters', 'weak_password');
+  if (!String(name || '').trim()) throw badRequest('What is your name?', 'name_required');
+  if (byEmail.has(normalized)) throw conflict('This email is already registered', 'email_taken');
 
   return save({
     id: `u-${nextId++}`,
@@ -45,11 +45,11 @@ export function register({ email, password, name }) {
 export function login({ email, password }) {
   const user = byEmail.get(normalizeEmail(email));
   if (user && isLocked(user)) {
-    throw new HttpError(423, 'Аккаунт временно заблокирован. Попробуйте позже или напишите в поддержку.', 'account_locked');
+    throw new HttpError(423, 'The account is temporarily locked. Try again later or contact support.', 'account_locked');
   }
   if (!user || !checkPassword(String(password || ''), user.passwordHash)) {
     if (user) registerFailedLogin(user);
-    throw unauthorized('Неверная почта или пароль', 'bad_credentials');
+    throw unauthorized('Wrong email or password', 'bad_credentials');
   }
   user.failedLogins = 0;
   return user;
@@ -59,7 +59,7 @@ function isLocked(user) {
   return Boolean(user.lockedUntil) && new Date(user.lockedUntil) > new Date();
 }
 
-// После пяти неудачных попыток подряд блокируем вход на 15 минут.
+// After five failed attempts in a row we lock the login for 15 minutes.
 function registerFailedLogin(user) {
   user.failedLogins = (user.failedLogins || 0) + 1;
   if (user.failedLogins >= MAX_FAILED_LOGINS) {
@@ -86,11 +86,11 @@ export function refresh(token) {
   try {
     payload = verifyToken(token, SIGNING_KEYS);
   } catch (err) {
-    if (err instanceof TokenError) throw unauthorized('Сессия истекла, войдите снова', 'session_expired');
+    if (err instanceof TokenError) throw unauthorized('Your session has expired, please log in again', 'session_expired');
     throw err;
   }
   const user = payload.type === 'refresh' && users.get(payload.sub);
-  if (!user) throw unauthorized('Сессия истекла, войдите снова', 'session_expired');
+  if (!user) throw unauthorized('Your session has expired, please log in again', 'session_expired');
   return { user, tokens: issueTokens(user) };
 }
 

@@ -5,10 +5,10 @@ const orders = new Map(SEED_ORDERS.map((order) => [order.id, order]));
 let seq = 10500;
 
 export const STATUS_TITLES = {
-  awaiting_payment: 'Ждёт оплаты',
-  paid: 'Оплачен',
-  shipped: 'В пути',
-  delivered: 'Доставлен',
+  awaiting_payment: 'Awaiting payment',
+  paid: 'Paid',
+  shipped: 'Shipped',
+  delivered: 'Delivered',
 };
 
 export function createOrder(data) {
@@ -28,7 +28,7 @@ export function findOrder(id) {
 
 export function getUserOrder(user, id) {
   const order = orders.get(id);
-  if (!order || order.userId !== user.id) throw notFound('Заказ не найден', 'order_not_found');
+  if (!order || order.userId !== user.id) throw notFound('Order not found', 'order_not_found');
   return order;
 }
 

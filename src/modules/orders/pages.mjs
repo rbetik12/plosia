@@ -3,7 +3,7 @@ import { formatPrice } from '../../lib/money.mjs';
 import { layout } from '../../views/layout.mjs';
 import { STATUS_TITLES } from './service.mjs';
 
-const dateFormat = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+const dateFormat = new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
 const formatDate = (iso) => dateFormat.format(new Date(iso));
 
 export function accountPage(req, orders) {
@@ -11,13 +11,13 @@ export function accountPage(req, orders) {
   <section class="account">
     <header class="account__head">
       <div>
-        <p class="eyebrow">Личный кабинет</p>
+        <p class="eyebrow">My account</p>
         <h1>${req.user.name}</h1>
         <p class="muted">${req.user.email}</p>
       </div>
-      <button class="btn btn--ghost" data-logout>Выйти</button>
+      <button class="btn btn--ghost" data-logout>Log out</button>
     </header>
-    <h2>Мои заказы</h2>
+    <h2>My orders</h2>
     ${orders.length
       ? html`<div class="orders">${orders.map(
           (order) => html`
@@ -28,20 +28,20 @@ export function accountPage(req, orders) {
             <span class="order-row__total">${formatPrice(order.total)}</span>
           </a>`,
         )}</div>`
-      : html`<p class="muted">Заказов пока нет. <a href="/cats">Выбрать котика</a></p>`}
+      : html`<p class="muted">No orders yet. <a href="/cats">Pick a cat</a></p>`}
   </section>`;
-  return layout(req, { title: 'Личный кабинет', page: 'account', body });
+  return layout(req, { title: 'My account', page: 'account', body });
 }
 
 export function orderPage(req, order) {
   const body = html`
-  <nav class="crumbs"><a href="/account">Мои заказы</a> / <span>${order.id}</span></nav>
+  <nav class="crumbs"><a href="/account">My orders</a> / <span>${order.id}</span></nav>
   <section class="order">
     <header class="order__head">
-      <h1>Заказ ${order.id}</h1>
+      <h1>Order ${order.id}</h1>
       <span class="status status--${order.status}">${STATUS_TITLES[order.status]}</span>
     </header>
-    <p class="muted">Оформлен ${formatDate(order.createdAt)}</p>
+    <p class="muted">Placed on ${formatDate(order.createdAt)}</p>
     <div class="order__lines">
       ${order.items.map(
         (item) => html`
@@ -53,15 +53,15 @@ export function orderPage(req, order) {
       )}
     </div>
     <dl class="summary__rows">
-      <div><dt>Товары</dt><dd>${formatPrice(order.subtotal)}</dd></div>
-      ${order.discount ? html`<div><dt>Скидка</dt><dd>−${formatPrice(order.discount)}</dd></div>` : ''}
-      <div><dt>Доставка</dt><dd>${order.delivery.cost ? formatPrice(order.delivery.cost) : 'бесплатно'}</dd></div>
-      <div class="summary__total"><dt>Итого</dt><dd>${formatPrice(order.total)}</dd></div>
+      <div><dt>Items</dt><dd>${formatPrice(order.subtotal)}</dd></div>
+      ${order.discount ? html`<div><dt>Discount</dt><dd>−${formatPrice(order.discount)}</dd></div>` : ''}
+      <div><dt>Delivery</dt><dd>${order.delivery.cost ? formatPrice(order.delivery.cost) : 'free'}</dd></div>
+      <div class="summary__total"><dt>Total</dt><dd>${formatPrice(order.total)}</dd></div>
     </dl>
     ${order.status === 'awaiting_payment'
       ? ''
-      : html`<button class="btn btn--ghost" data-receipt="${order.id}">Показать чек</button>
+      : html`<button class="btn btn--ghost" data-receipt="${order.id}">Show receipt</button>
         <div class="receipt" data-receipt-body hidden></div>`}
   </section>`;
-  return layout(req, { title: `Заказ ${order.id}`, page: 'order', body });
+  return layout(req, { title: `Order ${order.id}`, page: 'order', body });
 }

@@ -3,22 +3,22 @@ import { setCartCount } from '../header.js';
 
 function row(item) {
   const qty = item.type === 'cat'
-    ? '<span class="qty qty--single">1 шт.</span>'
+    ? '<span class="qty qty--single">1 pc.</span>'
     : `<div class="qty" data-id="${item.id}">
-         <button class="qty__btn" data-qty="${item.qty - 1}" ${item.qty <= 1 ? 'disabled' : ''} aria-label="Меньше">−</button>
+         <button class="qty__btn" data-qty="${item.qty - 1}" ${item.qty <= 1 ? 'disabled' : ''} aria-label="Less">−</button>
          <span>${item.qty}</span>
-         <button class="qty__btn" data-qty="${item.qty + 1}" aria-label="Больше">+</button>
+         <button class="qty__btn" data-qty="${item.qty + 1}" aria-label="More">+</button>
        </div>`;
   return `
   <div class="line">
     <img class="line__img" src="${item.image}" alt="">
     <div class="line__title">
       <b>${escapeHtml(item.title)}</b>
-      <span class="muted">${formatPrice(item.price)} за шт.</span>
+      <span class="muted">${formatPrice(item.price)} each</span>
     </div>
     ${qty}
     <span class="line__total">${formatPrice(item.total)}</span>
-    <button class="line__remove" data-remove="${item.id}" aria-label="Удалить">✕</button>
+    <button class="line__remove" data-remove="${item.id}" aria-label="Remove">✕</button>
   </div>`;
 }
 
@@ -32,9 +32,9 @@ export function init() {
     if (!cart.items.length) {
       items.innerHTML = `
         <div class="empty">
-          <h2>Корзина пуста</h2>
-          <p class="lead">Котики сами себя не заберут.</p>
-          <a class="btn btn--primary" href="/cats">К котикам</a>
+          <h2>Your cart is empty</h2>
+          <p class="lead">Cats won't take themselves home.</p>
+          <a class="btn btn--primary" href="/cats">To the cats</a>
         </div>`;
       summary.hidden = true;
       return;

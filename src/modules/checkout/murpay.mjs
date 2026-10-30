@@ -1,8 +1,8 @@
-// Клиент платёжного шлюза MurPay.
-// В песочнице шлюз эмулируется: случайная задержка ответа и тестовые карты.
+// Client for the MurPay payment gateway.
+// In the sandbox the gateway is emulated: random response latency and test cards.
 import crypto from 'node:crypto';
 
-// Покупатель не должен ждать оплату дольше пары секунд.
+// The customer should not wait for a payment longer than a couple of seconds.
 const TIMEOUT_MS = 2000;
 
 export class PaymentGatewayError extends Error {
@@ -26,7 +26,7 @@ export async function charge({ orderId, amount, card }) {
   return { status: 'approved', paymentId: `mp_${crypto.randomUUID().slice(0, 12)}`, amount };
 }
 
-// Задержка как у реального шлюза: обычно ~0,7 с, иногда заметно дольше.
+// Latency like a real gateway: usually ~0.7 s, sometimes noticeably longer.
 function sandboxLatency() {
   const z = Math.sqrt(-2 * Math.log(1 - Math.random())) * Math.cos(2 * Math.PI * Math.random());
   return Math.round(Math.exp(6.55 + 0.8 * z));

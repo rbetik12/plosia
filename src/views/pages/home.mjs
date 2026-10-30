@@ -8,21 +8,21 @@ export function homePage(req) {
   const body = html`
   <section class="hero">
     <div class="hero__text">
-      <p class="eyebrow">Магазин котиков и всего, что они любят</p>
-      <h1>Найдите своего <span class="accent">мурчащего</span> друга</h1>
-      <p class="lead">Котята и взрослые коты из проверенных питомников и приютов-партнёров. Корм и лакомства — с доставкой по всей стране.</p>
+      <p class="eyebrow">A shop for cats and everything they love</p>
+      <h1>Find your <span class="accent">purring</span> friend</h1>
+      <p class="lead">Kittens and adult cats from trusted breeders and partner shelters. Food and treats — delivered across the country.</p>
       <div class="hero__cta">
-        <a class="btn btn--primary" href="/cats">Смотреть котиков</a>
-        <a class="btn btn--ghost" href="/food">Выбрать корм</a>
+        <a class="btn btn--primary" href="/cats">Browse cats</a>
+        <a class="btn btn--ghost" href="/food">Choose food</a>
       </div>
     </div>
-    <div class="hero__photo"><img src="/img/hero/hero-03.jpg" alt="Рыжий котёнок"></div>
+    <div class="hero__photo"><img src="/img/hero/hero-03.jpg" alt="Ginger kitten"></div>
   </section>
 
   <section class="section">
     <header class="section__head">
-      <h2>Ждут вас прямо сейчас</h2>
-      <a href="/cats">Все котики →</a>
+      <h2>Waiting for you right now</h2>
+      <a href="/cats">All cats →</a>
     </header>
     <div class="grid">
       ${featuredCats().map(
@@ -41,10 +41,10 @@ export function homePage(req) {
 
   <section class="section promo-strip">
     <div>
-      <h2>Корм, который одобрил Барсик</h2>
-      <p>Сухой, влажный и лакомства от пяти брендов. Курьером — бесплатно от 3 000 ₽.</p>
+      <h2>Food approved by Barsik</h2>
+      <p>Dry, wet and treats from five brands. Courier delivery is free from 3,000 ₽.</p>
     </div>
-    <a class="btn btn--primary" href="/food">В отдел корма</a>
+    <a class="btn btn--primary" href="/food">To the food aisle</a>
   </section>`;
 
   return layout(req, { page: 'home', body });

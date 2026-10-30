@@ -1,40 +1,40 @@
 # Plosia
 
-Интернет-магазин котиков и кошачьего корма. Монолит: Node.js + Express, серверные страницы + немного JS на фронте. Данные живут в памяти — перезапуск сервера возвращает магазин в исходное состояние.
+An online shop for cats and cat food. A monolith: Node.js + Express, server-rendered pages plus a little frontend JS. Data lives in memory — restarting the server returns the shop to its initial state.
 
-## Модули (`src/modules/`)
+## Modules (`src/modules/`)
 
-| Модуль | Что делает |
+| Module | What it does |
 |---|---|
-| `catalog` | Каталог котиков и корма, фильтры, кэш результатов фильтрации |
-| `cart` | Корзина, промокоды (одна скидка на заказ, не больше 50%) |
-| `checkout` | Оформление: курьер или пункт выдачи, оплата через шлюз MurPay |
-| `auth` | Регистрация, вход, JWT (access 15 мин + refresh 30 дней), блокировка после 5 неудачных входов |
-| `orders` | История заказов, электронный чек |
-| `mail` | Письма покупателям (в демо — тестовый ящик на `/mail`) |
+| `catalog` | Catalog of cats and food, filters, a cache of filtering results |
+| `cart` | Cart, promo codes (one discount per order, no more than 50%) |
+| `checkout` | Checkout: courier or pickup point, payment through the MurPay gateway |
+| `auth` | Sign-up, login, JWT (access 15 min + refresh 30 days), lockout after 5 failed logins |
+| `orders` | Order history, electronic receipt |
+| `mail` | Emails to customers (in the demo — a test mailbox at `/mail`) |
 
-Общий код — `src/lib/`, данные-заглушки — `src/data/`, фронтенд — `public/`.
+Shared code is in `src/lib/`, stub data in `src/data/`, the frontend in `public/`.
 
-## Как запустить
+## How to run
 
-- `npm install && npm start` — магазин на http://localhost:3000 (и по адресу в локальной сети)
-- `npm run doctor` — проверить окружение и доступ к Sentry
+- `npm install && npm start` — the shop at http://localhost:3000 (and at the address on the local network)
+- `npm run doctor` — check the environment and access to Sentry
 
-## Релизы
+## Releases
 
-Релизы помечены git-тегами: `v2.3.0`, `v2.4.0`, `v2.5.0`. В продакшене сейчас **2.5.0**; в `main` после тега — изменения следующего релиза.
+Releases are marked with git tags: `v2.3.0`, `v2.4.0`, `v2.5.0`. Production is currently on **2.5.0**; `main` after the tag holds the changes of the next release.
 
-- коммиты релиза: `git log v2.4.0..v2.5.0 --stat`
-- изменения следующего релиза: `git log v2.5.0..main --stat`
+- commits of a release: `git log v2.4.0..v2.5.0 --stat`
+- changes of the next release: `git log v2.5.0..main --stat`
 
 ## Sentry
 
-Ошибки продакшена собираются в Sentry (проект `plosia`), доступ — через MCP-сервер `sentry` (только чтение). В репозитории его конфига нет: участник подключает сервер сам, с токеном из `.env` (README → задание 2). У событий есть теги `http.status_code`, `endpoint` и релиз `plosia@<версия>`. Пример запроса: `http.status_code:500`.
+Production errors are collected in Sentry (project `plosia`), accessed through the `sentry` MCP server (read-only). The repository has no config for it: you connect the server yourself, with the token from `.env` (README → "Connecting the Sentry MCP server"). Events have the tags `http.status_code`, `endpoint` and the release `plosia@<version>`. Example query: `http.status_code:500`.
 
-## Правила QA-команды
+## QA team rules
 
-`docs/qa/` — severity и приоритеты, зоны риска. Скиллы должны опираться на них, а не на общие знания.
+`docs/qa/` — severity and priorities, risk zones. Skills must rely on them, not on general knowledge.
 
-## Скиллы
+## Skills
 
 Claude Code — `.claude/skills/`, Codex — `.agents/skills/`.

@@ -9,13 +9,13 @@ export function init() {
 
   loadSummary();
 
-  // Самовывоз: показываем пункты выдачи выбранного города.
+  // Pickup: show the pickup points of the selected city.
   const points = form.querySelector('[data-pickup]');
   const deliveryType = () => new FormData(form).get('deliveryType');
 
   async function loadPoints() {
     const city = form.elements.city.value;
-    points.innerHTML = '<p class="muted">Ищем пункты выдачи...</p>';
+    points.innerHTML = '<p class="muted">Looking for pickup points...</p>';
     try {
       const { items } = await api('GET', `/api/checkout/pickup-points?city=${encodeURIComponent(city)}`);
       points.innerHTML = items.length
@@ -29,9 +29,9 @@ export function init() {
           </label>`,
             )
             .join('')
-        : '<p class="muted">В этом городе пока нет пунктов выдачи.</p>';
+        : '<p class="muted">There are no pickup points in this city yet.</p>';
     } catch (err) {
-      points.innerHTML = '<p class="muted">Не удалось загрузить пункты выдачи.</p>';
+      points.innerHTML = '<p class="muted">Could not load pickup points.</p>';
       showError(err);
     }
   }
@@ -54,8 +54,8 @@ export function init() {
         ({ order } = await api('POST', '/api/checkout', orderPayload()));
         form.querySelectorAll('fieldset:not([data-payment])').forEach((f) => (f.disabled = true));
         payment.disabled = false;
-        submit.textContent = `Оплатить ${formatPrice(order.total)}`;
-        toast(`Заказ ${order.id} создан, осталось оплатить`, 'ok');
+        submit.textContent = `Pay ${formatPrice(order.total)}`;
+        toast(`Order ${order.id} created, only payment left`, 'ok');
       } else {
         const data = new FormData(form);
         await api('POST', '/api/checkout/pay', {

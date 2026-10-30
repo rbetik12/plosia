@@ -5,12 +5,12 @@ import { config } from './config.mjs';
 const app = createApp();
 
 app.listen(config.port, config.host, () => {
-  console.log(`\n  Plosia ${config.version} запущена\n`);
-  console.log(`  Локально:  http://localhost:${config.port}`);
+  console.log(`\n  Plosia ${config.version} is running\n`);
+  console.log(`  Local:    http://localhost:${config.port}`);
   for (const ip of lanAddresses()) {
-    console.log(`  В сети:    http://${ip}:${config.port}`);
+    console.log(`  Network:  http://${ip}:${config.port}`);
   }
-  console.log(`\n  Страница воркшопа: http://localhost:${config.port}/workshop\n`);
+  console.log('');
 });
 
 function lanAddresses() {

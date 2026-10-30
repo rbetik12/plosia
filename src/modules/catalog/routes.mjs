@@ -38,6 +38,6 @@ pages.get('/food', (req, res) => res.send(catalogPage(req, 'food', filterOptions
 
 pages.get('/cats/:slug', (req, res) => {
   const cat = findCatBySlug(req.params.slug);
-  if (!cat) throw notFound('Такого котика у нас нет. Может, он уже нашёл дом?');
+  if (!cat) throw notFound('We have no such cat. Maybe he has already found a home?');
   res.send(catPage(req, cat));
 });

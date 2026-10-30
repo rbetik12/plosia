@@ -1,5 +1,5 @@
-// Кэш результатов фильтрации каталога.
-// Фильтровать на каждый запрос дорого, а одни и те же комбинации фильтров запрашивают постоянно.
+// Cache for catalog filtering results.
+// Filtering on every request is expensive, and the same filter combinations are requested all the time.
 const TTL_MS = 60 * 1000;
 const entries = new Map();
 
@@ -12,7 +12,7 @@ export function filtersKey(filters) {
 }
 
 export function cached(key, compute) {
-  // Без фильтров кэшировать нечего: полный список и так под рукой.
+  // Nothing to cache without filters: the full list is already at hand.
   if (!key) return compute();
 
   const hit = entries.get(key);

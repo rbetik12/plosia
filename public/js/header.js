@@ -12,18 +12,18 @@ export async function refreshCartCount() {
     const cart = await api('GET', '/api/cart');
     setCartCount(cart.count);
   } catch {
-    // счётчик в шапке не критичен
+    // the counter in the header is not critical
   }
 }
 
-// Access-токен короткий. Если сервер сказал, что сессия истекла, — обновляем её по refresh-токену.
+// The access token is short-lived. If the server says the session has expired, we renew it with the refresh token.
 export async function refreshSession() {
   if (!document.body.dataset.authExpired) return;
   try {
     await api('POST', '/api/auth/refresh');
     location.reload();
   } catch {
-    // refresh тоже истёк — пользователь просто войдёт заново
+    // the refresh token has expired too — the user will simply log in again
   }
 }
 
@@ -36,7 +36,7 @@ export function bindAddToCart() {
     try {
       const cart = await api('POST', '/api/cart/items', { productId: btn.dataset.addToCart, qty: 1 });
       setCartCount(cart.count);
-      toast('Добавили в корзину', 'ok');
+      toast('Added to cart', 'ok');
     } catch (err) {
       showError(err);
     } finally {

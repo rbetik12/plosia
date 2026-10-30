@@ -1,5 +1,5 @@
-// Отправка писем. В демо-окружении письма не уходят наружу,
-// а складываются в тестовый ящик — его видно на странице /mail.
+// Sending email. In the demo environment emails do not leave the system,
+// they go to a test mailbox, which you can see on the /mail page.
 import crypto from 'node:crypto';
 import * as Sentry from '@sentry/node';
 import { orderConfirmation } from './templates.mjs';
@@ -7,7 +7,7 @@ import { orderConfirmation } from './templates.mjs';
 const OUTBOX_LIMIT = 50;
 const MAX_ATTEMPTS = 3;
 const RETRY_DELAY_MS = 300;
-// Песочница SMTP иногда отвечает ошибкой — как настоящий почтовый провайдер.
+// The SMTP sandbox sometimes responds with an error — like a real email provider.
 const SANDBOX_FAILURE_RATE = 0.08;
 
 const outbox = [];
@@ -25,11 +25,11 @@ async function deliver(message, attempt = 1) {
     await smtpSend(message);
   } catch (err) {
     if (attempt >= MAX_ATTEMPTS) {
-      // Письмо не должно ломать оформление заказа: фиксируем и идём дальше.
+      // An email must not break checkout: record the failure and move on.
       Sentry.captureException(err, { extra: { to: message.to, subject: message.subject } });
       return;
     }
-    // Сбой провайдера — только предупреждение: письмо уйдёт со следующей попытки.
+    // A provider failure is only a warning: the email will go out on the next attempt.
     Sentry.captureException(err, {
       level: 'warning',
       extra: { to: message.to, subject: message.subject, attempt },

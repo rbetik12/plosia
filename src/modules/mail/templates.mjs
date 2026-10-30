@@ -4,23 +4,23 @@ export function orderConfirmation(order, user) {
   const lines = order.items.map((item) => `  • ${item.title} × ${item.qty} — ${formatPrice(item.price * item.qty)}`);
   const delivery =
     order.delivery.type === 'pickup'
-      ? `Заберите заказ в пункте выдачи: ${order.delivery.address}. Мы напишем, когда он приедет.`
-      : `Курьер привезёт заказ по адресу: ${order.delivery.city}, ${order.delivery.address}.`;
+      ? `Pick up your order at the pickup point: ${order.delivery.address}. We will let you know when it arrives.`
+      : `The courier will bring your order to: ${order.delivery.city}, ${order.delivery.address}.`;
   return {
     to: order.contacts.email || user.email,
-    subject: `Мурр! Заказ ${order.id} оплачен`,
+    subject: `Purr! Order ${order.id} is paid`,
     text: [
-      `${user.name}, привет!`,
+      `Hi, ${user.name}!`,
       '',
-      `Оплата заказа ${order.id} прошла — ${formatPrice(order.total)}. Спасибо!`,
+      `Payment for order ${order.id} went through — ${formatPrice(order.total)}. Thank you!`,
       '',
-      'Что внутри:',
+      "What's inside:",
       ...lines,
       '',
       delivery,
       '',
-      'Мурлыкаем от радости,',
-      'ваша Plosia',
+      'Purring with joy,',
+      'your Plosia',
     ].join('\n'),
   };
 }

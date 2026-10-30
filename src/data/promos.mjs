@@ -1,4 +1,4 @@
-// Действующие промокоды. Срок действия — включительно, по Москве.
+// Active promo codes. The expiry date is inclusive, Moscow time.
 export const PROMOS = [
   { code: 'MEOW10', kind: 'percent', value: 10, expiresAt: '2027-12-31' },
   { code: 'MURR15', kind: 'percent', value: 15, minSubtotal: 2000, expiresAt: '2027-12-31' },

@@ -2,7 +2,7 @@ import { PROMOS } from '../../data/promos.mjs';
 import { HttpError } from '../../lib/errors.mjs';
 import { formatPrice, percentOf } from '../../lib/money.mjs';
 
-// Одна скидка на заказ, и она не может быть больше половины суммы товаров.
+// One discount per order, and it cannot exceed half of the items total.
 export const MAX_DISCOUNT_PERCENT = 50;
 
 export class PromoError extends HttpError {
@@ -17,12 +17,12 @@ export function findPromo(code) {
 }
 
 export function validatePromo(promo, subtotal, now = new Date()) {
-  if (!promo) throw new PromoError('Такого промокода нет', 'promo_not_found');
+  if (!promo) throw new PromoError('No such promo code', 'promo_not_found');
   if (new Date(`${promo.expiresAt}T23:59:59+03:00`) < now) {
-    throw new PromoError('Срок действия промокода истёк', 'promo_expired');
+    throw new PromoError('This promo code has expired', 'promo_expired');
   }
   if (promo.minSubtotal && subtotal < promo.minSubtotal) {
-    throw new PromoError(`Промокод действует для заказов от ${formatPrice(promo.minSubtotal)}`, 'promo_min_subtotal');
+    throw new PromoError(`This promo code is valid for orders from ${formatPrice(promo.minSubtotal)}`, 'promo_min_subtotal');
   }
 }
 

@@ -18,7 +18,7 @@ export async function api(method, url, body) {
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    const err = new Error(data.error?.message || `Ошибка ${res.status}`);
+    const err = new Error(data.error?.message || `Error ${res.status}`);
     err.status = res.status;
     err.code = data.error?.code;
     throw err;
@@ -31,7 +31,7 @@ export function showError(err) {
   toast(`${err.message}${suffix}`, 'error');
 }
 
-const priceFormat = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
+const priceFormat = new Intl.NumberFormat('en-US',{ maximumFractionDigits: 0 });
 export const formatPrice = (amount) => `${priceFormat.format(amount)} ₽`;
 
 export function escapeHtml(value) {

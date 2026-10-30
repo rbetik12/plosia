@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Проверяет, что у участника всё готово к воркшопу.
+// Checks that your environment is ready.
 import { execFileSync, spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,47 +16,47 @@ const bad = (msg, hint) => {
   console.log(`  ✘ ${msg}${hint ? `\n      → ${hint}` : ''}`);
 };
 
-console.log('\nПроверяем окружение Plosia\n');
+console.log('\nChecking the Plosia environment\n');
 
 const [major, minor] = process.versions.node.split('.').map(Number);
 if (major > 22 || (major === 22 && minor >= 13)) ok(`Node.js ${process.versions.node}`);
-else bad(`Node.js ${process.versions.node} — нужен 22.13 или новее`, 'обновите Node.js: https://nodejs.org');
+else bad(`Node.js ${process.versions.node} — 22.13 or newer is required`, 'update Node.js: https://nodejs.org');
 
 try {
   const tags = execFileSync('git', ['tag', '--list', 'v*'], { cwd: root, encoding: 'utf8' }).trim().split('\n').filter(Boolean);
-  if (tags.length >= 3) ok(`git-теги релизов: ${tags.join(', ')}`);
-  else bad('не вижу тегов релизов (v2.3.0, v2.4.0, v2.5.0)', 'выполните `git fetch --tags`');
+  if (tags.length >= 3) ok(`git release tags: ${tags.join(', ')}`);
+  else bad('no release tags found (v2.3.0, v2.4.0, v2.5.0)', 'run `git fetch --tags`');
 } catch {
-  bad('git не найден или это не git-репозиторий', 'склонируйте проект через git clone');
+  bad('git not found, or this is not a git repository', 'clone the project with git clone');
 }
 
-if (fs.existsSync(path.join(root, 'node_modules', 'express'))) ok('зависимости установлены');
-else bad('зависимости не установлены', 'выполните `npm install`');
+if (fs.existsSync(path.join(root, 'node_modules', 'express'))) ok('dependencies installed');
+else bad('dependencies not installed', 'run `npm install`');
 
-if (fs.existsSync(path.join(root, 'node_modules', '@sentry', 'mcp-server'))) ok('Sentry MCP-сервер установлен');
-else bad('Sentry MCP-сервер не установлен', 'выполните `npm install`');
+if (fs.existsSync(path.join(root, 'node_modules', '@sentry', 'mcp-server'))) ok('Sentry MCP server installed');
+else bad('Sentry MCP server not installed', 'run `npm install`');
 
 const token = process.env.SENTRY_ACCESS_TOKEN?.trim();
 if (!token || token.includes('PASTE')) {
-  bad('в .env нет SENTRY_ACCESS_TOKEN', 'выполните `npm run setup` и вставьте токен от ведущего');
+  bad('no SENTRY_ACCESS_TOKEN in .env', 'copy .env.example to .env and paste your Sentry token');
 } else {
   const host = process.env.SENTRY_HOST || 'sentry.io';
   const url = `https://${host}/api/0/organizations/${process.env.SENTRY_ORG}/projects/`;
   try {
     const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-    if (res.ok) ok(`токен Sentry работает (${process.env.SENTRY_ORG}/${process.env.SENTRY_PROJECT})`);
-    else bad(`Sentry отвечает ${res.status} на запрос с токеном`, 'проверьте токен в .env или попросите новый');
+    if (res.ok) ok(`Sentry token works (${process.env.SENTRY_ORG}/${process.env.SENTRY_PROJECT})`);
+    else bad(`Sentry responds ${res.status} to a request with the token`, 'check the token in .env or generate a new one');
   } catch (err) {
-    bad(`Sentry недоступен: ${err.message}`, 'проверьте интернет');
+    bad(`Sentry is unreachable: ${err.message}`, 'check your internet connection');
   }
-  if (await mcpStarts(token)) ok('Sentry MCP запускается с вашим токеном (подключить его к агенту — задание 2)');
-  else bad('Sentry MCP не стартовал', 'запустите `npx @sentry/mcp-server@0.42.0 --access-token=<токен из .env>` и посмотрите ошибку');
+  if (await mcpStarts(token)) ok('Sentry MCP starts with your token (connecting it to your agent is a separate step — see README)');
+  else bad('Sentry MCP did not start', 'run `npx @sentry/mcp-server@0.42.0 --access-token=<token from .env>` and look at the error');
 }
 
-console.log(failed ? `\nНайдено проблем: ${failed}\n` : '\nВсё готово, можно писать скиллы!\n');
+console.log(failed ? `\nProblems found: ${failed}\n` : '\nAll set, you can start writing skills!\n');
 process.exit(failed ? 1 : 0);
 
-// Запускаем сервер напрямую, без конфигов агентов: проверяем пакет и токен, а не подключение.
+// We start the server directly, without agent configs: this checks the package and the token, not the connection.
 function mcpStarts(token) {
   return new Promise((resolve) => {
     const args = ['--skills=inspect'];

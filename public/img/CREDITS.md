@@ -1,9 +1,9 @@
-# Фотографии
+# Photos
 
-Все фотографии — с [Wikimedia Commons](https://commons.wikimedia.org) под свободными лицензиями.
-Фото уменьшены и обрезаны под карточки магазина.
+All photos are from [Wikimedia Commons](https://commons.wikimedia.org) under free licenses.
+The photos were downscaled and cropped to fit the shop cards.
 
-| Файл | Автор | Лицензия | Источник |
+| File | Author | License | Source |
 |---|---|---|---|
 | `cats/cat-01.jpg` | Keith Kissel | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) | [Commons](https://commons.wikimedia.org/wiki/File:June_odd-eyed-cat_cropped.jpg) |
 | `cats/cat-02.jpg` | Nature with payal | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) | [Commons](https://commons.wikimedia.org/wiki/File:Baby_sleep_%F0%9F%98%BB.jpg) |
@@ -26,7 +26,7 @@
 | `cats/cat-19.jpg` | Nickolas Titkov from Moscow, Russian Federation | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0) | [Commons](https://commons.wikimedia.org/wiki/File:SPH_Slavir_Fidel_(14188206691).jpg) |
 | `cats/cat-20.jpg` | Terragio67 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) | [Commons](https://commons.wikimedia.org/wiki/File:Calico_cat,_-_Assisi,_Italy.jpg) |
 | `cats/cat-21.jpg` | Kafun | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) | [Commons](https://commons.wikimedia.org/wiki/File:Calico_Cat_Loafing_On_A_Cat_House.jpg) |
-| `cats/cat-22.jpg` | Юрий Д.К. | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) | [Commons](https://commons.wikimedia.org/wiki/File:Cat_in_Efremov,_Russia1.jpg) |
+| `cats/cat-22.jpg` | Yuriy D.K. | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) | [Commons](https://commons.wikimedia.org/wiki/File:Cat_in_Efremov,_Russia1.jpg) |
 | `cats/cat-23.jpg` | Pudelek | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) | [Commons](https://commons.wikimedia.org/wiki/File:P%C5%99%C3%ADchovice_-_old_window_and_cat.jpg) |
 | `cats/cat-24.jpg` | Jennifer C. | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) | [Commons](https://commons.wikimedia.org/wiki/File:Foster_Kittens_(25331156100).jpg) |
 | `cats/cat-25.jpg` | Nickolas Titkov from Moscow, Russian Federation | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0) | [Commons](https://commons.wikimedia.org/wiki/File:BEN_Bengalian_kitten_(4492540155).jpg) |

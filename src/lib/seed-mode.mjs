@@ -1,6 +1,6 @@
-// Режим посева для scripts/seed-sentry.mjs (PLOSIA_SEED_MODE=1).
-// События получают время и релиз из заголовков запроса — так история ошибок
-// раскладывается по последним дням. В обычном режиме этот код не подключается.
+// Seed mode for scripts/seed-sentry.mjs (PLOSIA_SEED_MODE=1).
+// Events take their timestamp and release from the request headers, so the error history
+// is spread across the last few days. This code is not loaded in normal mode.
 import * as Sentry from '@sentry/node';
 import { Router } from 'express';
 
@@ -16,7 +16,7 @@ export function seedRouter() {
       Sentry.getIsolationScope().addEventProcessor((event) => {
         event.timestamp = ts;
         if (release) event.release = release;
-        // Посев идёт через локальный сервер, а в Sentry события должны выглядеть как с продакшена.
+        // Seeding goes through a local server, but in Sentry the events must look like they came from production.
         if (event.request?.url) event.request.url = event.request.url.replace(/^https?:\/\/[^/]+/, 'https://plosia.shop');
         if (event.request?.headers) event.request.headers.host = 'plosia.shop';
         return event;

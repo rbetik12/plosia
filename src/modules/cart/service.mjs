@@ -17,11 +17,11 @@ export function getCart(cartId) {
 
 export function addItem(cart, productId, qty = 1) {
   const product = findProduct(productId);
-  if (!product) throw notFound('Такого товара нет', 'product_not_found');
+  if (!product) throw notFound('No such product', 'product_not_found');
 
   const existing = cart.items.find((item) => item.productId === productId);
   if (product.type === 'cat') {
-    if (existing) throw badRequest('Этот котик уже в корзине', 'cat_already_in_cart');
+    if (existing) throw badRequest('This cat is already in your cart', 'cat_already_in_cart');
     qty = 1;
   }
   checkQty(qty);
@@ -40,7 +40,7 @@ export function updateQty(cart, itemId, qty) {
   const item = findItem(cart, itemId);
   const product = findProduct(item.productId);
   if (product.type === 'cat' && qty !== 1) {
-    throw badRequest('Каждый котик у нас в единственном экземпляре', 'cat_qty');
+    throw badRequest('Every cat here is one of a kind', 'cat_qty');
   }
   checkQty(qty);
   item.qty = qty;
@@ -60,13 +60,13 @@ export function clearCart(cart) {
 
 export function applyPromo(cart, rawCode) {
   if (cart.promoCode) {
-    throw conflict(`Уже применён промокод ${cart.promoCode.toUpperCase()}. Одна скидка на заказ.`, 'promo_already_applied');
+    throw conflict(`Promo code ${cart.promoCode.toUpperCase()} is already applied. One discount per order.`, 'promo_already_applied');
   }
   const code = String(rawCode || '').trim();
   const promo = findPromo(code.toUpperCase());
   const sum = subtotal(cart);
   validatePromo(promo, sum);
-  // Храним только код: условия промокода берём актуальные при каждом пересчёте.
+  // We store only the code: the promo's current terms are used on every recalculation.
   cart.promoCode = code;
   cart.discount = calcDiscount(promo, sum);
 }
@@ -76,7 +76,7 @@ export function removePromo(cart) {
   cart.discount = 0;
 }
 
-// Скидка зависит от суммы корзины, поэтому при смене количества пересчитываем её.
+// The discount depends on the cart total, so we recalculate it when a quantity changes.
 function recalcDiscount(cart) {
   if (!cart.promoCode) return;
   cart.discount = calcDiscount(findPromo(cart.promoCode), subtotal(cart));
@@ -114,12 +114,12 @@ export function summarize(cart) {
 
 function checkQty(qty) {
   if (!Number.isInteger(qty) || qty < 1 || qty > MAX_QTY) {
-    throw badRequest(`Количество — от 1 до ${MAX_QTY}`, 'bad_qty');
+    throw badRequest(`Quantity must be between 1 and ${MAX_QTY}`, 'bad_qty');
   }
 }
 
 function findItem(cart, itemId) {
   const item = cart.items.find((i) => i.id === itemId);
-  if (!item) throw notFound('Такой позиции в корзине нет', 'item_not_found');
+  if (!item) throw notFound('No such item in the cart', 'item_not_found');
   return item;
 }

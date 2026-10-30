@@ -2,14 +2,14 @@ import { conflict } from '../../lib/errors.mjs';
 import { vatIncluded } from '../../lib/money.mjs';
 import { findProduct } from '../catalog/service.mjs';
 
-const SELLER = { name: 'ООО «Плосия»', inn: '7701234567', address: 'Москва, ул. Покровка, 17' };
+const SELLER = { name: 'Plosia LLC', inn: '7701234567', address: 'Moscow, Pokrovka St., 17' };
 
-// Живые животные продаются без НДС, корм и лакомства — 20%.
+// Live animals are sold without VAT; food and treats carry 20%.
 const VAT_RATES = { cat: 0, food: 20 };
 
 export function buildReceipt(order) {
   if (!['paid', 'shipped', 'delivered'].includes(order.status)) {
-    throw conflict('Чек появится после оплаты заказа', 'receipt_not_ready');
+    throw conflict('The receipt will be available after the order is paid', 'receipt_not_ready');
   }
 
   const lines = order.items.map((item) => {

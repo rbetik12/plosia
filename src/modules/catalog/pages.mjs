@@ -4,20 +4,20 @@ import { layout } from '../../views/layout.mjs';
 import { formatAge } from './dto.mjs';
 
 const TITLES = {
-  cats: { title: 'Котики', lead: 'Каждый привит, приучен к лотку и ждёт свою семью.' },
-  food: { title: 'Корм и лакомства', lead: 'Сухой и влажный корм, вкусняшки для дрессировки и просто так.' },
+  cats: { title: 'Cats', lead: 'Every cat is vaccinated, litter-trained and waiting for a family.' },
+  food: { title: 'Food and treats', lead: 'Dry and wet food, treats for training and just because.' },
 };
 
 const FILTER_FIELDS = {
   cats: [
-    ['breed', 'Порода', 'breeds'],
-    ['color', 'Окрас', 'colors'],
-    ['age', 'Возраст', 'ages'],
+    ['breed', 'Breed', 'breeds'],
+    ['color', 'Color', 'colors'],
+    ['age', 'Age', 'ages'],
   ],
   food: [
-    ['kind', 'Тип', 'kinds'],
-    ['brand', 'Бренд', 'brands'],
-    ['age', 'Для кого', 'ages'],
+    ['kind', 'Type', 'kinds'],
+    ['brand', 'Brand', 'brands'],
+    ['age', 'For', 'ages'],
   ],
 };
 
@@ -34,24 +34,24 @@ function filtersPanel(kind, options) {
       <label class="select">
         <span>${label}</span>
         <select name="${name}">
-          <option value="">Все</option>
+          <option value="">All</option>
           ${options[key].map((o) => html`<option value="${o.id}">${o.title}</option>`)}
         </select>
       </label>`,
     )}
     ${kind === 'cats'
-      ? html`<label class="select"><span>Пол</span>
-          <select name="sex"><option value="">Все</option><option value="m">Котик</option><option value="f">Кошечка</option></select>
+      ? html`<label class="select"><span>Sex</span>
+          <select name="sex"><option value="">All</option><option value="m">Male</option><option value="f">Female</option></select>
         </label>`
       : ''}
     <label class="select">
-      <span>Цена до</span>
+      <span>Price up to</span>
       <select name="price_max">
-        <option value="">Любая</option>
+        <option value="">Any</option>
         ${PRICE_STEPS[kind].map((p) => html`<option value="${p}">${formatPrice(p)}</option>`)}
       </select>
     </label>
-    <button class="btn btn--ghost btn--small" type="reset">Сбросить</button>
+    <button class="btn btn--ghost btn--small" type="reset">Reset</button>
   </form>`;
 }
 
@@ -65,18 +65,18 @@ export function catalogPage(req, kind, options) {
         <p class="lead">${lead}</p>
       </div>
       <label class="select">
-        <span>Сортировка</span>
+        <span>Sort by</span>
         <select name="sort" data-sort>
-          <option value="">Сначала популярные</option>
-          <option value="price_asc">Сначала дешевле</option>
-          <option value="price_desc">Сначала дороже</option>
-          ${kind === 'cats' ? html`<option value="new">Сначала новинки</option>` : ''}
+          <option value="">Most popular first</option>
+          <option value="price_asc">Cheapest first</option>
+          <option value="price_desc">Most expensive first</option>
+          ${kind === 'cats' ? html`<option value="new">New arrivals first</option>` : ''}
         </select>
       </label>
     </header>
     <div class="catalog__body">
       ${filtersPanel(kind, options)}
-      <div class="grid" data-grid aria-live="polite"><p class="muted">Загружаем...</p></div>
+      <div class="grid" data-grid aria-live="polite"><p class="muted">Loading...</p></div>
     </div>
   </section>`;
   return layout(req, { title, page: 'catalog', body });
@@ -84,22 +84,22 @@ export function catalogPage(req, kind, options) {
 
 export function catPage(req, cat) {
   const body = html`
-  <nav class="crumbs"><a href="/cats">Котики</a> / <span>${cat.title}</span></nav>
+  <nav class="crumbs"><a href="/cats">Cats</a> / <span>${cat.title}</span></nav>
   <article class="pet">
     <div class="pet__photo"><img src="${cat.image}" alt="${cat.title}, ${cat.breed.title}"></div>
     <div class="pet__info">
       <p class="eyebrow">${cat.breed.title}</p>
       <h1>${cat.title}</h1>
       <ul class="facts">
-        <li><b>Возраст</b><span>${formatAge(cat.ageMonths)}</span></li>
-        <li><b>Пол</b><span>${cat.sex === 'f' ? 'Кошечка' : 'Котик'}</span></li>
-        <li><b>Окрас</b><span>${cat.colorTitle}</span></li>
+        <li><b>Age</b><span>${formatAge(cat.ageMonths)}</span></li>
+        <li><b>Sex</b><span>${cat.sex === 'f' ? 'Female' : 'Male'}</span></li>
+        <li><b>Color</b><span>${cat.colorTitle}</span></li>
       </ul>
       <p>${cat.description}</p>
       <ul class="tags">${cat.traits.map((t) => html`<li>${t}</li>`)}</ul>
       <div class="pet__buy">
         <span class="price price--big">${formatPrice(cat.price)}</span>
-        <button class="btn btn--primary" data-add-to-cart="${cat.id}">Забрать домой</button>
+        <button class="btn btn--primary" data-add-to-cart="${cat.id}">Take me home</button>
       </div>
     </div>
   </article>`;
